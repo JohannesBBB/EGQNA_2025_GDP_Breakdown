@@ -105,7 +105,7 @@ def create_grouped_stacked_figure():
         xaxis=dict(
             tickfont=dict(family='Arial', size=12, color='black', weight='bold')  # bold x-axis labels
         ),
-    margin=dict(l=40, r=40, t=80, b=40)
+    margin=dict(l=200, r=200, t=80, b=40)
     )
     return fig
 
