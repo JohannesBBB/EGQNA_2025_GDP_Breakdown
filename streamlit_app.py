@@ -45,6 +45,9 @@ categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L
 def create_qoq_figure(data_item):
     fig = go.Figure()
 
+    cont_8ms = data_item["cont_8ms"]
+    cont_12ms = data_item["cont_12ms"]
+
     # Ensure order: T+45, T+65, Early MS, Other MS
     fig.add_trace(go.Bar(
         x=categories,
