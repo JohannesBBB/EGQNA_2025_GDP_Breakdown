@@ -8,7 +8,6 @@ import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
 
-# ✅ MUST be the first Streamlit command
 st.set_page_config(layout="wide")
 
 # Sample data
@@ -53,7 +52,7 @@ def create_grouped_stacked_figure():
         marker_color='blue',
         offsetgroup=0,
         legendgroup='T+45',
-        hovertemplate='%{y:.3f} %<extra></extra>'
+        hovertemplate='T+45: %{y:.3f} %<extra></extra>'
     ))
 
     # T+65
