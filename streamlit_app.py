@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
 
-# Generate data
+# Generate sample data
 x = np.linspace(0, 10, 100)
 y = x
 
@@ -35,7 +35,8 @@ tabs = st.tabs(tab_names)
 
 for tab_name, tab in zip(tab_names, tabs):
     with tab:
+        # Correct: use tab_name string to display header
         st.header(f"{option} - {tab_name}")
         fig = create_figure()
-        # Add unique key to avoid duplicate ID errors
+        # Provide unique key per tab and option to avoid duplicate element IDs
         st.plotly_chart(fig, use_container_width=True, key=f"{option}_{tab_name}")
