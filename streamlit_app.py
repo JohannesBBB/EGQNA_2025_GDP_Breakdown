@@ -53,7 +53,7 @@ def create_grouped_stacked_figure():
         marker_color='blue',
         offsetgroup=0,
         legendgroup='T+45',
-        hovertemplate='%{y:.3f}%<extra></extra>'
+        hovertemplate='%{y:.3f} %<extra></extra>'
     ))
 
     # T+65
@@ -64,7 +64,7 @@ def create_grouped_stacked_figure():
         marker_color='green',
         offsetgroup=1,
         legendgroup='T+65',
-        hovertemplate='%{y:.3f}%<extra></extra>'
+        hovertemplate='%{y:.3f} %<extra></extra>'
     ))
 
     # cont_8ms
