@@ -10,34 +10,38 @@ import numpy as np
 
 st.set_page_config(layout="wide")
 
-# --- Data Storage: key = (metric, tab), value = list of items (each item is a dict with 4 series) ---
-# --- Data Storage: key = (metric, tab), value = list of named plot items ---
-data = {
-    ("QoQ Growth Rate", "Production - EA"): [
-        {
-            "name": "2023Q2",
-            "t45": np.array([0.000366, 0.003099, -0.025091, 0.005045, 0.007375, 0.008180, 0.032566, -0.000515,
-                             -0.001903, -0.020046, 0.006428, 0.000650, -0.002256, 0.015999]),
-            "t65": np.array([-0.000924, 0.002349, -0.030616, 0.009127, -0.007329, -0.008399, 0.025454, 0.002927,
-                             0.008900, -0.013183, 0.006696, 0.005052, 0.000251, 0.017114]),
-            "cont_8ms": np.array([-0.000884, -0.000023, -0.008313, -0.000088, -0.002572, -0.002227, -0.007573, 0.001121,
-                                  0.000052, 0.001353, 0.000054, 0.002903, 0.001199, 0.001336]),
-            "cont_12ms": np.array([-0.000406, -0.000726, 0.002788, 0.004169, -0.012133, -0.014352, 0.000460, 0.002322,
-                                   0.010752, 0.005510, 0.002140, 0.001499, 0.001309, -0.000220])
-        },
-        {
-            "name": "2023Q3",
-            "t45": np.array([0.010366, 0.003099, -0.025091, 0.005045, 0.007375, 0.008180, 0.032566, -0.000515,
-                             -0.001903, -0.020046, 0.006428, 0.000650, -0.002256, 0.015999]),
-            "t65": np.array([-0.000924, 0.002349, -0.030616, 0.009127, -0.007329, -0.008399, 0.025454, 0.002927,
-                             0.008900, -0.013183, 0.006696, 0.005052, 0.000251, 0.017114]),
-            "cont_8ms": np.array([-0.000884, -0.000023, -0.008313, -0.000088, -0.002572, -0.002227, -0.007573, 0.001121,
-                                  0.000052, 0.001353, 0.000054, 0.002903, 0.001199, 0.001336]),
-            "cont_12ms": np.array([-0.000406, -0.000726, 0.002788, 0.004169, -0.012133, -0.014352, 0.000460, 0.002322,
-                                   0.010752, 0.005510, 0.002140, 0.001499, 0.001309, -0.000220])
-        }
-    ]
-}
+import numpy as np
+
+tab_names = ["Production - EA", "Production - EU", "Expenditure EA", "Expenditure EU"]
+quarters = ["2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4"]
+categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L', 'M_N', 'OTQ', 'RTU']
+
+np.random.seed(42)  # for reproducibility
+
+data = {}
+
+for tab in tab_names:
+    data_list = []
+    for quarter in quarters:
+        t45 = np.random.uniform(-1, 1, size=len(categories))
+        t65 = t45 + np.random.uniform(-0.1, 0.1, size=len(categories))
+        d = t65 - t45
+        
+        c = 0.8 + np.random.uniform(-0.2, 0.2, size=len(categories))
+        # Clamp c to [0,1] so contributions make sense
+        c = np.clip(c, 0, 1)
+        
+        cont_8ms = (1 - c) * d
+        cont_12ms = c * d
+        
+        data_list.append({
+            "name": quarter,
+            "t45": t45,
+            "t65": t65,
+            "cont_8ms": cont_8ms,
+            "cont_12ms": cont_12ms
+        })
+    data[("QoQ Growth Rate", tab)] = data_list
 
 
 categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L', 'M_N', 'OTQ', 'RTU']
