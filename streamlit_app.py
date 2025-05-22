@@ -63,29 +63,27 @@ def create_grouped_stacked_figure():
         marker_color='green',
         offsetgroup=1,
         legendgroup='T+65',
-        hovertemplate='%{y:.3f} %<extra></extra>'
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
-
-    # cont_8ms
+    
     fig.add_trace(go.Bar(
         x=categories,
         y=cont_8ms * 100,
-        name='Cont. 8 MS (pps)',
+        name='Cont. Early MS (pps)',
         marker_color='orange',
         offsetgroup=2,
         legendgroup='Contribution',
-        hovertemplate='%{y:.3f} pps<extra></extra>'
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>'
     ))
 
-    # cont_12ms
     fig.add_trace(go.Bar(
         x=categories,
         y=cont_12ms * 100,
-        name='Cont. 12 MS (pps)',
+        name='Cont. Other MS (pps)',
         marker_color='red',
         offsetgroup=2,
         legendgroup='Contribution',
-        hovertemplate='%{y:.3f} pps<extra></extra>'
+        hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
     ))
 
     fig.update_layout(
