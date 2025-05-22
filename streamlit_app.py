@@ -110,7 +110,7 @@ tabs = st.tabs(tab_names)
 for tab_name, tab in zip(tab_names, tabs):
     with tab:
         st.header(f"{option} - {tab_name}")
-        if 1==1:#option == "QoQ Growth Rate" and tab_name == "Production - EA":
+        if option == "QoQ Growth Rate" and tab_name == "Production - EA":
             fig = create_real_data_figure()
         else:
             fig = create_figure()
