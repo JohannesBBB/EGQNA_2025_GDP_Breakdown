@@ -104,8 +104,8 @@ def create_grouped_stacked_figure():
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
         xaxis=dict(
             tickfont=dict(family='Arial', size=12, color='black', weight='bold')  # bold x-axis labels
-        )
-    margin=dict(l=40, r=40, t=80, b=40),
+        ),
+    margin=dict(l=40, r=40, t=80, b=40)
     )
     return fig
 
