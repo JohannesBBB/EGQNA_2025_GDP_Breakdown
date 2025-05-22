@@ -135,7 +135,6 @@ def create_qoq_figure(data_item):
             x=1.0,
             font=dict(size=12)
         )
-        )
     )
     return fig
 
