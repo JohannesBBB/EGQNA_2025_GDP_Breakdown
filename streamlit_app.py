@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
 
-# Data as decimals (already provided)
+# Your data (already scaled in decimals)
 growth_t45 = np.array([
     0.000366, 0.003099, -0.025091, 0.005045,
     0.007375, 0.008180, 0.032566, -0.000515,
@@ -36,7 +36,7 @@ categories = ['B1GQ','B1G','D21X31','A','BTE','C','F','GTI','J','K','L','M_N','O
 def create_grouped_stacked_figure():
     fig = go.Figure()
 
-    # T+45 bars, offset group per category, all in same legendgroup for color
+    # T+45 bars
     fig.add_trace(go.Bar(
         x=categories,
         y=growth_t45 * 100,
@@ -44,10 +44,13 @@ def create_grouped_stacked_figure():
         marker_color='blue',
         offsetgroup=0,
         legendgroup='T+45',
-        hovertemplate='%{x}<br>T+45: %{y:.3f}%<extra></extra>'
+        hovertemplate=(
+            "<b>%{x}</b><br>" +
+            "T+45: %{y:.3f}%<extra></extra>"
+        )
     ))
 
-    # T+65 bars, offset group 1 (so side by side)
+    # T+65 bars
     fig.add_trace(go.Bar(
         x=categories,
         y=growth_t65 * 100,
@@ -55,10 +58,13 @@ def create_grouped_stacked_figure():
         marker_color='green',
         offsetgroup=1,
         legendgroup='T+65',
-        hovertemplate='%{x}<br>T+65: %{y:.3f}%<extra></extra>'
+        hovertemplate=(
+            "<b>%{x}</b><br>" +
+            "T+65: %{y:.3f}%<extra></extra>"
+        )
     ))
 
-    # cont_8ms bars (part of stacked bar), offset group 2
+    # cont_8ms bars (stacked)
     fig.add_trace(go.Bar(
         x=categories,
         y=cont_8ms * 100,
@@ -66,11 +72,13 @@ def create_grouped_stacked_figure():
         marker_color='orange',
         offsetgroup=2,
         legendgroup='Contribution',
-        hovertemplate='%{x}<br>Cont. 8 MS: %{y:.3f} pps<extra></extra>',
-        showlegend=True,
+        hovertemplate=(
+            "<b>%{x}</b><br>" +
+            "Cont. 8 MS: %{y:.3f} pps<extra></extra>"
+        )
     ))
 
-    # cont_12ms bars (stacked on cont_8ms), same offset group 2, legendgroup "Contribution"
+    # cont_12ms bars (stacked)
     fig.add_trace(go.Bar(
         x=categories,
         y=cont_12ms * 100,
@@ -78,8 +86,10 @@ def create_grouped_stacked_figure():
         marker_color='red',
         offsetgroup=2,
         legendgroup='Contribution',
-        hovertemplate='%{x}<br>Cont. 12 MS: %{y:.3f} pps<extra></extra>',
-        showlegend=True,
+        hovertemplate=(
+            "<b>%{x}</b><br>" +
+            "Cont. 12 MS: %{y:.3f} pps<extra></extra>"
+        )
     ))
 
     fig.update_layout(
@@ -91,11 +101,15 @@ def create_grouped_stacked_figure():
         xaxis_tickangle=-45,
         bargap=0.15,
         bargroupgap=0.1,
-        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
+        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+        xaxis=dict(
+            tickfont=dict(family='Arial', size=12, color='black', weight='bold')  # bold x-axis labels
+        )
     )
     return fig
 
-# Streamlit UI
+# --- Streamlit setup ---
+st.set_page_config(layout="wide")  # Use wide mode to get more width
 
 st.title("Interactive Plotly Chart with Menus and Tabs")
 
