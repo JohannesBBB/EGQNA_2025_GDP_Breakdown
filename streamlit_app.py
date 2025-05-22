@@ -119,13 +119,13 @@ def create_qoq_figure(data_item):
         xaxis_title="Category",
         xaxis=dict(
             tickangle=-45,
-            tickfont=dict(family='Arial', size=14, color='black', weight='bold')
+            tickfont=dict(family='Arial', size=16, color='black', weight='bold')
         ),
         yaxis=dict(
-            tickfont=dict(family='Arial', size=14, color='black')
+            tickfont=dict(family='Arial', size=16, color='black')
         ),
         hoverlabel=dict(
-            font_size=14
+            font_size=18
         ),
         hovermode='x unified',
         legend=dict(
