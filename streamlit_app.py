@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
 
-# Data as decimals
+# Data as decimals (already provided)
 growth_t45 = np.array([
     0.000366, 0.003099, -0.025091, 0.005045,
     0.007375, 0.008180, 0.032566, -0.000515,
@@ -16,8 +16,6 @@ growth_t65 = np.array([
     0.008900, -0.013183, 0.006696, 0.005052,
     0.000251, 0.017114
 ])
-
-diff = growth_t65 - growth_t45
 
 cont_8ms = np.array([
     -0.000884, -0.000023, -0.008313, -0.000088,
@@ -35,50 +33,60 @@ cont_12ms = np.array([
 
 categories = ['B1GQ','B1G','D21X31','A','BTE','C','F','GTI','J','K','L','M_N','OTQ','RTU']
 
-def create_stacked_grouped_figure():
+def create_grouped_stacked_figure():
     fig = go.Figure()
 
-    # Create x-axis groups with suffixes
-    x_t45 = [f"{cat} T+45" for cat in categories]
-    x_t65 = [f"{cat} T+65" for cat in categories]
-    x_cont = [f"{cat} Contribution" for cat in categories]
-
-    # Add T+45 bars
+    # T+45 bars, offset group per category, all in same legendgroup for color
     fig.add_trace(go.Bar(
-        x=x_t45,
+        x=categories,
         y=growth_t45 * 100,
         name='GR T+45 (%)',
-        marker_color='blue'
+        marker_color='blue',
+        offsetgroup=0,
+        legendgroup='T+45',
+        hovertemplate='%{x}<br>T+45: %{y:.3f}%<extra></extra>'
     ))
 
-    # Add T+65 bars
+    # T+65 bars, offset group 1 (so side by side)
     fig.add_trace(go.Bar(
-        x=x_t65,
+        x=categories,
         y=growth_t65 * 100,
         name='GR T+65 (%)',
-        marker_color='green'
+        marker_color='green',
+        offsetgroup=1,
+        legendgroup='T+65',
+        hovertemplate='%{x}<br>T+65: %{y:.3f}%<extra></extra>'
     ))
 
-    # Contribution - stacked bars: cont_8ms + cont_12ms
+    # cont_8ms bars (part of stacked bar), offset group 2
     fig.add_trace(go.Bar(
-        x=x_cont,
+        x=categories,
         y=cont_8ms * 100,
         name='Cont. 8 MS (pps)',
-        marker_color='orange'
+        marker_color='orange',
+        offsetgroup=2,
+        legendgroup='Contribution',
+        hovertemplate='%{x}<br>Cont. 8 MS: %{y:.3f} pps<extra></extra>',
+        showlegend=True,
     ))
 
+    # cont_12ms bars (stacked on cont_8ms), same offset group 2, legendgroup "Contribution"
     fig.add_trace(go.Bar(
-        x=x_cont,
+        x=categories,
         y=cont_12ms * 100,
         name='Cont. 12 MS (pps)',
-        marker_color='red'
+        marker_color='red',
+        offsetgroup=2,
+        legendgroup='Contribution',
+        hovertemplate='%{x}<br>Cont. 12 MS: %{y:.3f} pps<extra></extra>',
+        showlegend=True,
     ))
 
     fig.update_layout(
         barmode='stack',
         title="QoQ Growth Rate and Contribution - Production EA",
         yaxis_title="Percentage (%)",
-        xaxis_title="Category and Metric",
+        xaxis_title="Category",
         hovermode='x unified',
         xaxis_tickangle=-45,
         bargap=0.15,
@@ -88,6 +96,7 @@ def create_stacked_grouped_figure():
     return fig
 
 # Streamlit UI
+
 st.title("Interactive Plotly Chart with Menus and Tabs")
 
 option = st.selectbox("Select metric:", ["QoQ Growth Rate", "Contribution to growth"])
@@ -99,9 +108,8 @@ for tab_name, tab in zip(tab_names, tabs):
     with tab:
         st.header(f"{option} - {tab_name}")
         if option == "QoQ Growth Rate" and tab_name == "Production - EA":
-            fig = create_stacked_grouped_figure()
+            fig = create_grouped_stacked_figure()
         else:
-            # Placeholder for other tabs
             fig = go.Figure()
             fig.update_layout(title="No data yet for this tab")
         st.plotly_chart(fig, use_container_width=True, key=f"{option}_{tab_name}")
