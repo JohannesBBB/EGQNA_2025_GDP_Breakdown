@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 22 11:56:34 2025
-
-@author: buckjoh
-"""
-
 import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
@@ -13,7 +6,6 @@ import numpy as np
 x = np.linspace(0, 10, 100)
 y = x
 
-# Create Plotly figure function to reuse
 def create_figure():
     hover_text = [f"x value: {xi:.2f}<br>y value: {yi:.2f}" for xi, yi in zip(x, y)]
     fig = go.Figure()
@@ -36,16 +28,14 @@ def create_figure():
 
 st.title("Interactive Plotly Chart with Menus and Tabs")
 
-# Main menu selectbox
 option = st.selectbox("Select metric:", ["QoQ Growth Rate", "Contribution to growth"])
 
-# Create tabs
-tabs = st.tabs(["Production - EA", "Production - EU", "Expenditure EA", "Expenditure EU"])
+tab_names = ["Production - EA", "Production - EU", "Expenditure EA", "Expenditure EU"]
+tabs = st.tabs(tab_names)
 
-# For each tab, display the plot
-for tab in tabs:
+for tab_name, tab in zip(tab_names, tabs):
     with tab:
-        st.header(f"{option} - {tab.title}")
+        st.header(f"{option} - {tab_name}")
         fig = create_figure()
-        st.plotly_chart(fig, use_container_width=True)
-
+        # Add unique key to avoid duplicate ID errors
+        st.plotly_chart(fig, use_container_width=True, key=f"{option}_{tab_name}")
