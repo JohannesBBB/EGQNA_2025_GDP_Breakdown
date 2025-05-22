@@ -130,7 +130,7 @@ def create_qoq_figure(data_item):
         legend=dict(
             orientation='v',
             yanchor='bottom',
-            y=1.1,           
+            y=1,           
             xanchor='right',
             x=1.0,
             font=dict(size=12)
