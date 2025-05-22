@@ -66,24 +66,38 @@ def create_qoq_figure(data_item):
         hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
 
+for i, cat in enumerate(categories):
+    c1 = cont_8ms[i] * 100
+    c2 = cont_12ms[i] * 100
+
+    # Stacking logic
+    if c1 >= 0 and c2 >= 0:
+        base1, base2 = 0, c1
+    elif c1 <= 0 and c2 <= 0:
+        base1, base2 = 0, c1
+    else:
+        base1, base2 = 0, 0
+
+    # Early MS bar
     fig.add_trace(go.Bar(
-        x=categories,
-        y=data_item['cont_8ms'] * 100,
+        x=[cat],
+        y=[c1],
+        base=[base1],
         name='Cont. Early MS (pps)',
         marker_color='orange',
-        offsetgroup=2,
-        legendgroup='Contribution',
-        hovertemplate='Early MS: %{y:.3f} pps<extra></extra>'
+        showlegend=(i == 0),
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>'
     ))
 
+    # Other MS bar
     fig.add_trace(go.Bar(
-        x=categories,
-        y=data_item['cont_12ms'] * 100,
+        x=[cat],
+        y=[c2],
+        base=[base2],
         name='Cont. Other MS (pps)',
         marker_color='red',
-        offsetgroup=2,
-        legendgroup='Contribution',
-        hovertemplate='Other MS: %{y:.3f} pps<extra></extra>'
+        showlegend=(i == 0),
+        hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
     ))
 
     fig.update_layout(
