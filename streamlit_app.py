@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu May 22 11:56:34 2025
-
 @author: buckjoh
 """
 
@@ -9,10 +8,10 @@ import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
 
-# Set wide page layout
+# ✅ MUST be the first Streamlit command
 st.set_page_config(layout="wide")
 
-# Sample data (categories and values)
+# Sample data
 categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L', 'M_N', 'OTQ', 'RTU']
 
 growth_t45 = np.array([
@@ -46,7 +45,7 @@ cont_12ms = np.array([
 def create_grouped_stacked_figure():
     fig = go.Figure()
 
-    # T+45 bars
+    # T+45
     fig.add_trace(go.Bar(
         x=categories,
         y=growth_t45 * 100,
@@ -54,10 +53,10 @@ def create_grouped_stacked_figure():
         marker_color='blue',
         offsetgroup=0,
         legendgroup='T+45',
-        hovertemplate='%{y:.3f}%<extra></extra>'  # value only, no trace name or category repeat
+        hovertemplate='%{y:.3f}%<extra></extra>'
     ))
 
-    # T+65 bars
+    # T+65
     fig.add_trace(go.Bar(
         x=categories,
         y=growth_t65 * 100,
@@ -68,7 +67,7 @@ def create_grouped_stacked_figure():
         hovertemplate='%{y:.3f}%<extra></extra>'
     ))
 
-    # cont_8ms bars (stacked)
+    # cont_8ms
     fig.add_trace(go.Bar(
         x=categories,
         y=cont_8ms * 100,
@@ -79,7 +78,7 @@ def create_grouped_stacked_figure():
         hovertemplate='%{y:.3f} pps<extra></extra>'
     ))
 
-    # cont_12ms bars (stacked)
+    # cont_12ms
     fig.add_trace(go.Bar(
         x=categories,
         y=cont_12ms * 100,
@@ -115,9 +114,7 @@ def create_grouped_stacked_figure():
 
     return fig
 
-# --- Streamlit setup ---
-st.set_page_config(layout="wide")  # Use wide mode to get more width
-
+# --- UI ---
 st.title("Interactive Plotly Chart with Menus and Tabs")
 
 option = st.selectbox("Select metric:", ["QoQ Growth Rate", "Contribution to growth"])
