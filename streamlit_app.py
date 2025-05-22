@@ -116,7 +116,6 @@ def create_qoq_figure(data_item):
             xanchor='center'
         ),
         yaxis_title="Percentage (%)",
-        xaxis_title="Category",
         xaxis=dict(
             tickangle=-45,
             tickfont=dict(family='Arial', size=16, color='black', weight='bold')
