@@ -106,20 +106,26 @@ def create_qoq_figure(data_item):
     fig.update_layout(
         barmode='stack',
         height=500,
-        margin=dict(l=200, r=200, t=80, b=80),  # Left and right margins = 200
+        margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.15,
         bargroupgap=0.1,
         title=dict(
             text=data_item.get("name", ""),
-            font=dict(size=24),  # Larger title
-            x=0.5,  # Center title
+            font=dict(size=24),
+            x=0.5,
             xanchor='center'
         ),
         yaxis_title="Percentage (%)",
         xaxis_title="Category",
         xaxis=dict(
             tickangle=-45,
-            tickfont=dict(family='Arial', size=12, color='black', weight='bold')
+            tickfont=dict(family='Arial', size=14, color='black', weight='bold')
+        ),
+        yaxis=dict(
+            tickfont=dict(family='Arial', size=14, color='black')
+        ),
+        hoverlabel=dict(
+            font_size=14
         ),
         hovermode='x unified',
         legend=dict(
