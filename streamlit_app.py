@@ -16,7 +16,7 @@ st.set_page_config(layout="wide")
 st.markdown("""
     <style>
     .my-plotly-container {
-        max-width: 90vw;
+        max-width: 70vw;
         margin-left: auto;
         margin-right: auto;
     }
