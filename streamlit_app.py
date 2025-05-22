@@ -26,7 +26,7 @@ def create_figure():
     )
     return fig
 
-st.title("Interactive Plotly Chart with Menus and Tabs")
+st.title("Test")
 
 option = st.selectbox("Select metric:", ["QoQ Growth Rate", "Contribution to growth"])
 
