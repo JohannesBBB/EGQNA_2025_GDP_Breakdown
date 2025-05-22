@@ -129,11 +129,12 @@ def create_qoq_figure(data_item):
         hovermode='x unified',
         legend=dict(
             orientation='v',
-            yanchor='top',
-            y=1.0,
+            yanchor='bottom',  # change to 'bottom' so it grows down from y=1.1
+            y=1.15,            # move legend above the plot
             xanchor='right',
             x=1.0,
-            font=dict(size=16)
+            font=dict(size=12)
+        )
         )
     )
     return fig
