@@ -111,7 +111,7 @@ def create_qoq_figure(data_item):
         bargroupgap=0.1,
         title=dict(
             text=data_item.get("name", ""),
-            font=dict(size=24),
+            font=dict(size=30),
             x=0.5,
             xanchor='center'
         ),
@@ -133,7 +133,7 @@ def create_qoq_figure(data_item):
             y=1.0,
             xanchor='right',
             x=1.0,
-            font=dict(size=12)
+            font=dict(size=16)
         )
     )
     return fig
