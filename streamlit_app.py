@@ -45,7 +45,7 @@ categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L
 def create_qoq_figure(data_item):
     fig = go.Figure()
 
-    # Same trace logic as before...
+    # Ensure order: T+45, T+65, Early MS, Other MS
     fig.add_trace(go.Bar(
         x=categories,
         y=data_item['t45'] * 100,
@@ -88,23 +88,29 @@ def create_qoq_figure(data_item):
 
     fig.update_layout(
         barmode='stack',
-        height=450,
-        margin=dict(t=50, b=80),
+        height=500,
+        margin=dict(l=200, r=200, t=80, b=80),  # Left and right margins = 200
         bargap=0.15,
         bargroupgap=0.1,
-        title=data_item.get("name", ""),
+        title=dict(
+            text=data_item.get("name", ""),
+            font=dict(size=24),  # Larger title
+            x=0.5,  # Center title
+            xanchor='center'
+        ),
         yaxis_title="Percentage (%)",
         xaxis_title="Category",
         xaxis=dict(
+            tickangle=-45,
             tickfont=dict(family='Arial', size=12, color='black', weight='bold')
         ),
         hovermode='x unified',
         legend=dict(
-            orientation='h',
+            orientation='v',
             yanchor='top',
-            y=1.02,
-            xanchor='left',
-            x=0.05,
+            y=1.0,
+            xanchor='right',
+            x=1.0,
             font=dict(size=12)
         )
     )
