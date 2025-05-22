@@ -23,8 +23,8 @@ data = {}
 for tab in tab_names:
     data_list = []
     for quarter in quarters:
-        t45 = np.random.uniform(-1, 1, size=len(categories))
-        t65 = t45 + np.random.uniform(-0.1, 0.1, size=len(categories))
+        t45 = np.random.uniform(-0.01, 0.01, size=len(categories))
+        t65 = t45 + np.random.uniform(-0.001, 0.001, size=len(categories))
         d = t65 - t45
         
         c = 0.8 + np.random.uniform(-0.2, 0.2, size=len(categories))
