@@ -186,7 +186,7 @@ def create_qoq_figure(data_item, categories):
             color='black',
             symbol='line-ew-open',
             size=60,
-            line=dict(width=3)  # Adjust this value to make the line thicker
+            line=dict(width=4)  # Adjust this value to make the line thicker
         ),
         name='T+65',
         hovertemplate='T+65: %{y:.3f} %<extra></extra>'
