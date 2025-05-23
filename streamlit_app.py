@@ -65,7 +65,7 @@ for tab in tab_names:
     "Mean Contribution to Revision Early MS": mc1,
     "Mean Contribution to Revision Other MS": mc2
 },{
-    "name": "Mean Revision",
+    "name": "Mean Absolute Revision",
     "Mean Abs. Revision": mr,
     "Mean Abs. Contr. to Revision Early MS": mc1,
     "Mean Abs. Contr. to Revision Other MS": mc2
