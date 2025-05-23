@@ -96,7 +96,7 @@ def create_revision_figure(data_item, categories):
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
         
-        # Second item as "x" marker
+        # Second item as "o" marker
         label, values = items[1]
         fig.add_trace(go.Scatter(
             x=categories,
@@ -106,13 +106,13 @@ def create_revision_figure(data_item, categories):
                 color='orange',
                 symbol='circle-open',
                 size=12,
-                line=dict(width=2)
+                line=dict(width=3)
             ),
             name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
         
-        # Third item as "o" marker
+        # Third item as "x" marker
         label, values = items[2]
         fig.add_trace(go.Scatter(
             x=categories,
@@ -123,10 +123,6 @@ def create_revision_figure(data_item, categories):
                 symbol='x',
                 size=12,
                 line=None 
-            ),
-            line=dict(
-                width=20, 
-                color='orange'
             ),
             name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
