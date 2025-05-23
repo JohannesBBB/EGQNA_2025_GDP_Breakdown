@@ -120,7 +120,7 @@ def create_revision_figure(data_item, categories):
             mode='markers',
             marker=dict(
                 color='red',
-                symbol='cross-thin',
+                symbol='x-thin-open',
                 size=12,
                 line=None 
             ),
