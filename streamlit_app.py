@@ -148,6 +148,13 @@ def create_revision_figure(data_item, categories):
         hovermode='x unified',
         legend=dict(orientation='v', yanchor='top', y=1.15, xanchor='right', x=1.0, font=dict(size=12))
     )
+    fig.add_hline(
+        y=0,
+        line_dash="solid",
+        line_width=1,
+        line_color="black",
+        opacity=0.5
+    )
     return fig
 
 
