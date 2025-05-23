@@ -116,7 +116,7 @@ def create_revision_figure(data_item, categories):
             name=label + " (%)",
             marker_color=["blue", "green", "orange", "red", "purple"][bar_index % 5],
             offsetgroup=f"group{bar_index}",
-            hovertemplate=f"{label}: %{y:.3f} %<extra></extra>"
+            hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
         bar_index += 1
 
