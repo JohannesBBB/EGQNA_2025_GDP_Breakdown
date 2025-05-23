@@ -73,22 +73,13 @@ for tab in tab_names:
 def create_revision_figure(data_item, categories):
     fig = go.Figure()
     name = data_item.get("name", "")
-    
-    traces = []
-    x_labels = list(categories)
-    
-    # Prepare gap-aware x-labels
-    final_x_labels = []
-    num_cats = len(categories)
-    for i in range(num_cats):
-        final_x_labels.append(categories[i])
+    offset_index = 0
 
-    bar_index = 0
     for label, value in data_item.items():
         if label == "name":
             continue
 
-        # Handle gap marker
+        # Determine if there's a gap marker
         if isinstance(value, dict):
             y_vals = value["values"]
             gap_before = value.get("gap_before", False)
@@ -96,36 +87,27 @@ def create_revision_figure(data_item, categories):
             y_vals = value
             gap_before = False
 
-        # If a gap is requested, we add a dummy label before
+        # Increment offset group if a gap is requested
         if gap_before:
-            # Add spacer trace (with empty y)
-            fig.add_trace(go.Bar(
-                x=[""] * len(categories),
-                y=[None] * len(categories),
-                showlegend=False,
-                hoverinfo='skip',
-                marker_color='rgba(0,0,0,0)',
-                offsetgroup=f"gap{bar_index}"
-            ))
-            bar_index += 1
+            offset_index += 1  # Add gap by skipping an offset index (creates space)
 
-        # Add actual data trace
         fig.add_trace(go.Bar(
             x=categories,
             y=np.array(y_vals) * 100,
             name=label + " (%)",
-            marker_color=["blue", "green", "orange", "red", "purple"][bar_index % 5],
-            offsetgroup=f"group{bar_index}",
+            marker_color=["blue", "green", "orange", "red", "purple"][offset_index % 5],
+            offsetgroup=offset_index,
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
-        bar_index += 1
+
+        offset_index += 1  # Move to next bar group
 
     fig.update_layout(
         barmode='group',
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.15,
-        bargroupgap=0.4,  # Wider space between group clusters
+        bargroupgap=0.3,  # Wider for visible group separation
         title=dict(text=name, font=dict(size=24), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
         xaxis_title="Category",
