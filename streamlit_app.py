@@ -103,69 +103,106 @@ def create_revision_figure(data_item, categories):
 
 def create_qoq_figure(data_item, categories):
     fig = go.Figure()
-    cont_8ms = data_item["cont_8ms"]
-    cont_12ms = data_item["cont_12ms"]
+    
+    t45 = data_item['t45'] * 100
+    t65 = data_item['t65'] * 100
+    cont_8ms = data_item["cont_8ms"] * 100
+    cont_12ms = data_item["cont_12ms"] * 100
 
+    # Create lists to hold bars per category
+    y_t45, y_c1, y_c2 = [], [], []
+    base_t45, base_c1, base_c2 = [], [], []
+
+    for i in range(len(categories)):
+        y0 = t45[i]
+        c1 = cont_8ms[i]
+        c2 = cont_12ms[i]
+
+        # Initialize stacking base points
+        pos_base = 0
+        neg_base = 0
+
+        # Stack in order: t45, cont_8ms, cont_12ms
+        if y0 >= 0:
+            y_t45.append(y0)
+            base_t45.append(pos_base)
+            pos_base += y0
+        else:
+            y_t45.append(y0)
+            base_t45.append(neg_base)
+            neg_base += y0
+
+        if c1 >= 0:
+            y_c1.append(c1)
+            base_c1.append(pos_base)
+            pos_base += c1
+        else:
+            y_c1.append(c1)
+            base_c1.append(neg_base)
+            neg_base += c1
+
+        if c2 >= 0:
+            y_c2.append(c2)
+            base_c2.append(pos_base)
+            pos_base += c2
+        else:
+            y_c2.append(c2)
+            base_c2.append(neg_base)
+            neg_base += c2
+
+    # Add stacked bars
     fig.add_trace(go.Bar(
         x=categories,
-        y=data_item['t45'] * 100,
+        y=y_t45,
+        base=base_t45,
         name='T+45 (%)',
         marker_color='blue',
-        offsetgroup=0,
-        legendgroup='T+45',
         hovertemplate='T+45: %{y:.3f} %<extra></extra>'
     ))
 
     fig.add_trace(go.Bar(
         x=categories,
-        y=data_item['t65'] * 100,
-        name='T+65 (%)',
-        marker_color='green',
-        offsetgroup=1,
-        legendgroup='T+65',
+        y=y_c1,
+        base=base_c1,
+        name='Contribution Early MS (pps)',
+        marker_color='orange',
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>'
+    ))
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c2,
+        base=base_c2,
+        name='Contribution Other MS (pps)',
+        marker_color='red',
+        hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
+    ))
+
+    # Add T+65 as horizontal lines (scatter markers)
+    fig.add_trace(go.Scatter(
+        x=categories,
+        y=t65,
+        mode='markers',
+        marker=dict(color='black', symbol='line-ns-open', size=14),
+        name='T+65',
         hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
 
-    for i, cat in enumerate(categories):
-        c1 = cont_8ms[i] * 100
-        c2 = cont_12ms[i] * 100
-
-        base1, base2 = 0, c1 if c1 >= 0 and c2 >= 0 else (0 if c1 <= 0 and c2 <= 0 else 0)
-
-        fig.add_trace(go.Bar(
-            x=[cat],
-            y=[c1],
-            base=[base1],
-            name='Cont. Early MS (pps)',
-            marker_color='orange',
-            showlegend=(i == 0),
-            hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>'
-        ))
-
-        fig.add_trace(go.Bar(
-            x=[cat],
-            y=[c2],
-            base=[base2],
-            name='Cont. Other MS (pps)',
-            marker_color='red',
-            showlegend=(i == 0),
-            hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
-        ))
-
     fig.update_layout(
-        barmode='stack',
+        barmode='relative',
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.15,
         bargroupgap=0.1,
         title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
-        xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black', weight='bold')),
+        xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
         hovermode='x unified',
         legend=dict(orientation='v', yanchor='bottom', y=1, xanchor='right', x=1.0, font=dict(size=12))
     )
+
     return fig
 
 
