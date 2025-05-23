@@ -120,8 +120,8 @@ def create_revision_figure(data_item, categories):
             mode='markers',
             marker=dict(
                 color='red',
-                symbol='x',
-                size=10,
+                symbol='x-thin',
+                size=12,
                 line=None 
             ),
             name=label + " (%)",
