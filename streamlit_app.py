@@ -127,7 +127,7 @@ def create_revision_figure(data_item, categories):
             line=dict(
                 width=2, 
                 color='orange'
-            )
+            ),
             name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
