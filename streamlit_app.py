@@ -192,7 +192,8 @@ for tab_name, tab in zip(tab_names, tabs):
 
         if key in data:
             for i, data_item in enumerate(data[key]):
-                fig = create_qoq_figure(data_item, categories)
-                st.plotly_chart(fig, use_container_width=True, key=f"qoq_{key}_{i}")
+                a=1
+                #fig = create_qoq_figure(data_item, categories)
+                #st.plotly_chart(fig, use_container_width=True, key=f"qoq_{key}_{i}")
         else:
             st.warning("No data available for this selection.")
