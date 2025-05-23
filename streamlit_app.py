@@ -64,12 +64,22 @@ for tab in tab_names:
     "Mean Revision": mr,
     "Mean Contribution to Revision Early MS": mc1,
     "Mean Contribution to Revision Other MS": mc2
-},{
+    },{
     "name": "Mean Absolute Revision",
-    "Mean Abs. Revision": mr,
-    "Mean Abs. Contr. to Revision Early MS": mc1,
-    "Mean Abs. Contr. to Revision Other MS": mc2
-}]
+    "Mean Abs. Revision": mar,
+    "Mean Abs. Contr. to Revision Early MS": mac1,
+    "Mean Abs. Contr. to Revision Other MS": mac2
+    }]
+
+    data2[("Contribution to growth", tab)] = [{
+    "name": "Mean Revision",
+    "Mean Revision (1)": mr,
+    "Mean Revision (2)": mar
+    },{
+    "name": "Mean Absolute Revision",
+    "Mean Absolute Revision (1)": mr,
+    "Mean Absolute Revision (2)": mar
+    }]
 
 
 def create_revision_figure(data_item, categories):
