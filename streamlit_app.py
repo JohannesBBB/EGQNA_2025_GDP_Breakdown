@@ -146,7 +146,7 @@ def create_revision_figure(data_item, categories):
     return fig
 
 
-def create_qoq_figure(data_item, categories):
+def create_qoq_figure(data_item, categories,width_line):
     fig = go.Figure()
     
     t45 = data_item['t45'] * 100
@@ -214,7 +214,7 @@ def create_qoq_figure(data_item, categories):
         marker=dict(
             color='black',
             symbol='line-ew-open',
-            size=60,
+            size=width_line,
             line=dict(width=4)
         ),
         name='T+65',
@@ -284,8 +284,12 @@ for tab_name, tab in zip(tab_names, tabs):
         # Determine correct category set
         if tab_name.startswith("Production"):
             categories = categories_prod
+            if option == "QoQ Growth Rate":
+                width_line=60
         elif tab_name.startswith("Expenditure"):
             categories = categories_exp
+            if option == "QoQ Growth Rate":
+                width_line=200
         else:
             categories = []
 
@@ -296,9 +300,10 @@ for tab_name, tab in zip(tab_names, tabs):
         else:
             st.warning("No mean revision data available for this tab.")
 
-        if key in data:
-            for i, data_item in enumerate(data[key]):
-                fig = create_qoq_figure(data_item, categories)
-                st.plotly_chart(fig, use_container_width=True, key=f"qoq_{key}_{i}")
-        else:
-            st.warning("No data available for this selection.")
+        if option == "QoQ Growth Rate":
+            if key in data:
+                for i, data_item in enumerate(data[key]):
+                    fig = create_qoq_figure(data_item, categories,width_line)
+                    st.plotly_chart(fig, use_container_width=True, key=f"qoq_{key}_{i}")
+            else:
+                st.warning("No data available for this selection.")
