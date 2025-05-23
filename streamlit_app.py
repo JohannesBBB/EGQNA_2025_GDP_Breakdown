@@ -30,8 +30,10 @@ for tab in tab_names:
 
     # Time series data
     data_list = []
+    data_list2= []
     for quarter in quarters:
         t45 = np.random.uniform(-0.01, 0.01, size=len(categories))
+        t45_2 = np.random.uniform(-0.01, 0.01, size=len(categories))
         t65 = t45 + np.random.uniform(-0.001, 0.001, size=len(categories))
         d = t65 - t45
 
@@ -48,8 +50,19 @@ for tab in tab_names:
             "cont_8ms": cont_8ms,
             "cont_12ms": cont_12ms
         })
+        
+        data_list2.append({
+            "name": quarter,
+            "t45_1": t45,
+            "t45_2": t45_2,
+            "t65": t65,
+            "dif_1": (t45-t65),
+            "dif_2": (t45_2-t45)
+        })
+        
     data[("QoQ Growth Rate", tab)] = data_list
-
+    data[("Contribution to growth", tab)] = data_list2
+    
     # Revision data
     mr = np.random.uniform(-0.1, 0.1, size=len(categories))
     mc1 = np.random.uniform(-0.05, 0.05, size=len(categories))
@@ -297,6 +310,136 @@ def create_qoq_figure(data_item, categories,width_line):
     return fig
 
 
+def create_GO_One_figure(data_item, categories, width_line):
+    fig = go.Figure()
+    
+    # Convert to percentages
+    t45_1 = data_item['t45_1'] * 100
+    t45_2 = data_item['t45_2'] * 100
+    t65 = data_item['t65'] * 100
+    dif_1 = data_item['dif_1'] * 100  # t45_1 - t65
+    dif_2 = data_item['dif_2'] * 100  # t45_2 - t45_1
+
+    # Create modified categories for side-by-side display
+    modified_categories = []
+    for cat in categories:
+        modified_categories.extend([f"{cat}_1", f"{cat}_2"])
+
+    # Prepare data for plotting
+    bar1_values = []
+    bar1_diff = []
+    bar2_values = []
+    bar2_diff = []
+    
+    for i in range(len(categories)):
+        bar1_values.extend([t45_1[i], None])  # First bar pair
+        bar1_diff.extend([dif_1[i], None])
+        bar2_values.extend([None, t45_2[i]])  # Second bar pair
+        bar2_diff.extend([None, dif_2[i]])
+
+    # Add first set of bars (t45_1 and dif_1)
+    fig.add_trace(go.Bar(
+        x=modified_categories,
+        y=bar1_values,
+        name='T+45_1 (%)',
+        marker_color='blue',
+        hovertemplate='T+45_1: %{y:.3f} %<extra></extra>',
+        legendrank=1
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=modified_categories,
+        y=bar1_diff,
+        name='Diff to T+65',
+        marker_color='lightblue',
+        hovertemplate='Diff to T+65: %{y:.3f} %<extra></extra>',
+        legendrank=2,
+        base=bar1_values
+    ))
+
+    # Add second set of bars (t45_2 and dif_2)
+    fig.add_trace(go.Bar(
+        x=modified_categories,
+        y=bar2_values,
+        name='T+45_2 (%)',
+        marker_color='green',
+        hovertemplate='T+45_2: %{y:.3f} %<extra></extra>',
+        legendrank=3
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=modified_categories,
+        y=bar2_diff,
+        name='Diff to T+45_1',
+        marker_color='lightgreen',
+        hovertemplate='Diff to T+45_1: %{y:.3f} %<extra></extra>',
+        legendrank=4,
+        base=bar2_values
+    ))
+
+    # Add T+65 markers (two markers per category)
+    t65_markers = []
+    t65_positions = []
+    for i in range(len(categories)):
+        t65_markers.extend([t65[i], t65[i]])
+        t65_positions.extend([f"{categories[i]}_1", f"{categories[i]}_2"])
+    
+    fig.add_trace(go.Scatter(
+        x=t65_positions,
+        y=t65_markers,
+        mode='markers',
+        marker=dict(
+            color='black',
+            symbol='line-ew-open',
+            size=width_line,
+            line=dict(width=4)
+        ),
+        name='T+65',
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
+        legendrank=5
+    ))
+
+    # Update layout
+    fig.update_layout(
+        barmode='group',
+        height=500,
+        margin=dict(l=200, r=200, t=80, b=80),
+        bargap=0.3,  # Increased gap for better separation
+        title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
+        yaxis_title="Percentage (%)",
+        xaxis=dict(
+            tickvals=modified_categories[::2],  # Show only original category names
+            ticktext=categories,
+            tickangle=-45,
+            tickfont=dict(family='Arial', size=16, color='black')
+        ),
+        yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
+        hoverlabel=dict(font_size=18),
+        hovermode='x unified',
+        legend=dict(
+            orientation='v',
+            yanchor='bottom',
+            y=1,
+            xanchor='right',
+            x=1.0,
+            font=dict(size=12),
+            traceorder='normal'
+        )
+    )
+    
+    # Add zero line
+    fig.add_hline(
+        y=0,
+        line_dash="solid",
+        line_width=1,
+        line_color="black",
+        opacity=0.8,
+        layer='below'
+    )
+    
+    return fig
+
+
 
 # --- Streamlit UI ---
 st.title("Early Breakdown Estimations")
@@ -312,12 +455,10 @@ for tab_name, tab in zip(tab_names, tabs):
         # Determine correct category set
         if tab_name.startswith("Production"):
             categories = categories_prod
-            if option == "QoQ Growth Rate":
-                width_line=60
+            width_line=60
         elif tab_name.startswith("Expenditure"):
             categories = categories_exp
-            if option == "QoQ Growth Rate":
-                width_line=130
+            width_line=130
         else:
             categories = []
 
@@ -333,5 +474,12 @@ for tab_name, tab in zip(tab_names, tabs):
                 for i, data_item in enumerate(data[key]):
                     fig = create_qoq_figure(data_item, categories,width_line)
                     st.plotly_chart(fig, use_container_width=True, key=f"qoq_{key}_{i}")
+            else:
+                st.warning("No data available for this selection.")
+        else:
+            if key in data:
+                for i, data_item in enumerate(data[key]):
+                    fig = create_GO_One_figure(data_item, categories,width_line)
+                    st.plotly_chart(fig, use_container_width=True, key=f"goone_{key}_{i}")
             else:
                 st.warning("No data available for this selection.")
