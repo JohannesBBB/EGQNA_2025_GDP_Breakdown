@@ -70,16 +70,61 @@ for tab in tab_names:
 def create_revision_figure(data_item, categories):
     fig = go.Figure()
     name = data_item.get("name", "")
-
-    for i, (label, values) in enumerate(data_item.items()):
-        if label == "name":
-            continue
+    items = [(k, v) for k, v in data_item.items() if k != "name"]
+    
+    if len(items) != 3:
+        # Default case: plot all as bars
+        for i, (label, values) in enumerate(items):
+            fig.add_trace(go.Bar(
+                x=categories,
+                y=values * 100,
+                name=label + " (%)",
+                marker_color=["blue", "green", "orange", "red", "purple"][i % 5],
+                offsetgroup=i,
+                hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
+            ))
+    else:
+        # Special case for 3 items: first as bar, next two as markers
+        # First item as bar
+        label, values = items[0]
         fig.add_trace(go.Bar(
             x=categories,
             y=values * 100,
             name=label + " (%)",
-            marker_color=["blue", "green", "orange", "red", "purple"][i % 5],
-            offsetgroup=i,
+            marker_color="blue",
+            offsetgroup=0,
+            hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
+        ))
+        
+        # Second item as marker
+        label, values = items[1]
+        fig.add_trace(go.Scatter(
+            x=categories,
+            y=values * 100,
+            mode='markers',
+            marker=dict(
+                color='red',
+                symbol='line-ew-open',
+                size=60,
+                line=dict(width=3)
+            ),
+            name=label + " (%)",
+            hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
+        ))
+        
+        # Third item as marker
+        label, values = items[2]
+        fig.add_trace(go.Scatter(
+            x=categories,
+            y=values * 100,
+            mode='markers',
+            marker=dict(
+                color='orange',
+                symbol='line-ew-open',
+                size=60,
+                line=dict(width=3)
+            ),
+            name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
 
