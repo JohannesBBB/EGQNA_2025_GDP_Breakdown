@@ -150,34 +150,18 @@ def create_qoq_figure(data_item, categories):
             base_c2.append(neg_base)
             neg_base += c2
 
-    # Add stacked bars
+    # Add T+45 bar first (will appear first in legend)
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45,
         base=base_t45,
         name='T+45 (%)',
         marker_color='blue',
-        hovertemplate='T+45: %{y:.3f} %<extra></extra>'
+        hovertemplate='T+45: %{y:.3f} %<extra></extra>',
+        legendrank=1  # First in legend
     ))
 
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_c1,
-        base=base_c1,
-        name='Contribution Early MS (pps)',
-        marker_color='orange',
-        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>'
-    ))
-
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_c2,
-        base=base_c2,
-        name='Contribution Other MS (pps)',
-        marker_color='red',
-        hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
-    ))
-    
+    # Add T+65 scatter next (will appear second in legend but on top visually)
     fig.add_trace(go.Scatter(
         x=categories,
         y=t65,
@@ -186,10 +170,32 @@ def create_qoq_figure(data_item, categories):
             color='black',
             symbol='line-ew-open',
             size=60,
-            line=dict(width=4)  # Adjust this value to make the line thicker
+            line=dict(width=4)
         ),
         name='T+65',
-        hovertemplate='T+65: %{y:.3f} %<extra></extra>'
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
+        legendrank=2  # Second in legend
+    ))
+
+    # Add remaining bars (will appear after in legend)
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c1,
+        base=base_c1,
+        name='Contribution Early MS (pps)',
+        marker_color='orange',
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
+        legendrank=3  # Third in legend
+    ))
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c2,
+        base=base_c2,
+        name='Contribution Other MS (pps)',
+        marker_color='red',
+        hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>',
+        legendrank=4  # Fourth in legend
     ))
 
     fig.update_layout(
@@ -204,7 +210,15 @@ def create_qoq_figure(data_item, categories):
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
         hovermode='x unified',
-        legend=dict(orientation='v', yanchor='bottom', y=1, xanchor='right', x=1.0, font=dict(size=12))
+        legend=dict(
+            orientation='v',
+            yanchor='bottom',
+            y=1,
+            xanchor='right',
+            x=1.0,
+            font=dict(size=12),
+            traceorder='normal'  # This respects the legendrank ordering
+        )
     )
 
     return fig
