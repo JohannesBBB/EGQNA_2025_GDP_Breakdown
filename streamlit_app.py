@@ -51,7 +51,7 @@ for tab in tab_names:
     data[("QoQ Growth Rate", tab)] = data_list
 
     # Revision data
-    mr = np.random.uniform(-0.1, 5.1, size=len(categories))
+    mr = np.random.uniform(-0.1, 0.1, size=len(categories))
     mc1 = np.random.uniform(-0.05, 0.05, size=len(categories))
     mc2 = np.random.uniform(-0.05, 0.05, size=len(categories))
 
@@ -89,7 +89,7 @@ def create_revision_figure(data_item, categories):
 
         # Increment offset group if a gap is requested
         if gap_before:
-            offset_index += 1  # Add gap by skipping an offset index (creates space)
+            offset_index += 5  # Add gap by skipping an offset index (creates space)
 
         fig.add_trace(go.Bar(
             x=categories,
