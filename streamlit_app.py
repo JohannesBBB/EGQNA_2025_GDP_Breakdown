@@ -120,7 +120,7 @@ def create_revision_figure(data_item, categories):
             mode='markers',
             marker=dict(
                 color='red',
-                symbol='x',
+                symbol='cross',
                 size=12,
                 line=None 
             ),
