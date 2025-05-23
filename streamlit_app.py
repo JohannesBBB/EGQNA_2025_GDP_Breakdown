@@ -44,7 +44,91 @@ for tab in tab_names:
     data[("QoQ Growth Rate", tab)] = data_list
 
 
+
+data2 = {}
+
+for tab in tab_names:
+    mr = np.random.uniform(-0.1, 0.1, size=len(categories))
+    mc1 = np.random.uniform(-0.05, 0.05, size=len(categories))
+    mc2 = np.random.uniform(-0.05, 0.05, size=len(categories))
+    
+    data2[("Mean Revision", tab)] = [{
+        "name": "Mean Revision",
+        "mr": mr,
+        "mc1": mc1,
+        "mc2": mc2
+    }]
+
+
+
 categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L', 'M_N', 'OTQ', 'RTU']
+
+def create_mean_revision_figure(data_item):
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=data_item['mr'] * 100,
+        name='Mean Revision (%)',
+        marker_color='blue',
+        offsetgroup=0,
+        hovertemplate='Mean Revision: %{y:.3f} %<extra></extra>'
+    ))
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=data_item['mc1'] * 100,
+        name='Mean Contribution 1 (%)',
+        marker_color='orange',
+        offsetgroup=1,
+        hovertemplate='MC1: %{y:.3f} %<extra></extra>'
+    ))
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=data_item['mc2'] * 100,
+        name='Mean Contribution 2 (%)',
+        marker_color='red',
+        offsetgroup=2,
+        hovertemplate='MC2: %{y:.3f} %<extra></extra>'
+    ))
+
+    fig.update_layout(
+        barmode='group',
+        height=500,
+        margin=dict(l=200, r=200, t=80, b=80),
+        bargap=0.15,
+        bargroupgap=0.1,
+        title=dict(
+            text=data_item.get("name", ""),
+            font=dict(size=24),
+            x=0.5,
+            xanchor='center'
+        ),
+        yaxis_title="Percentage (%)",
+        xaxis_title="Category",
+        xaxis=dict(
+            tickangle=-45,
+            tickfont=dict(family='Arial', size=14, color='black')
+        ),
+        yaxis=dict(
+            tickfont=dict(family='Arial', size=14, color='black')
+        ),
+        hoverlabel=dict(
+            font_size=14
+        ),
+        legend=dict(
+            orientation='v',
+            yanchor='top',
+            y=1.15,
+            xanchor='right',
+            x=1.0,
+            font=dict(size=12)
+        )
+    )
+    return fig
+
+
 
 def create_qoq_figure(data_item):
     fig = go.Figure()
@@ -154,6 +238,13 @@ tabs = st.tabs(tab_names)
 for tab_name, tab in zip(tab_names, tabs):
     with tab:
         st.header(f"{option} - {tab_name}")
+        rev_key = ("Mean Revision", tab_name)
+        if rev_key in data2:
+            for i, data_item in enumerate(data2[rev_key]):
+                fig = create_mean_revision_figure(data_item)
+                st.plotly_chart(fig, use_container_width=True, key=f"{rev_key}_{i}")
+        else:
+            st.warning("No mean revision data available for this tab.")
 
         key = (option, tab_name)
         if key in data:
