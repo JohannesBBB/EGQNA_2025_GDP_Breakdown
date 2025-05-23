@@ -289,7 +289,7 @@ for tab_name, tab in zip(tab_names, tabs):
         elif tab_name.startswith("Expenditure"):
             categories = categories_exp
             if option == "QoQ Growth Rate":
-                width_line=120
+                width_line=130
         else:
             categories = []
 
