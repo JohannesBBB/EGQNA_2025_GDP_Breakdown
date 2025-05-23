@@ -177,35 +177,15 @@ def create_qoq_figure(data_item, categories):
         marker_color='red',
         hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
     ))
-
-    # Add a dummy trace for legend entry for T+65
+    
     fig.add_trace(go.Scatter(
-        x=[None],
-        y=[None],
-        mode='lines',
-        line=dict(color='black', width=2),
+        x=categories,
+        y=t65,
+        mode='markers',
+        marker=dict(color='black', symbol='line-ns-open', size=14),
         name='T+65',
-        showlegend=True
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
-
-    # Add horizontal lines using layout.shapes
-    bar_width = 0.5  # tweak this to match your bar spacing
-    fig.update_layout(shapes=[
-        dict(
-            type='line',
-            xref='x',
-            yref='y',
-            x0=cat,
-            x1=cat,
-            y0=val,
-            y1=val,
-            line=dict(color='black', width=3),
-            xanchor=cat,
-            x0_shift=-bar_width,
-            x1_shift=bar_width
-        )
-        for cat, val in zip(categories, t65)
-    ])
 
     fig.update_layout(
         barmode='relative',
