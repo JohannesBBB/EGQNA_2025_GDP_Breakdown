@@ -103,12 +103,13 @@ def create_revision_figure(data_item, categories):
 
 def create_qoq_figure(data_item, categories):
     fig = go.Figure()
-
+    
     t45 = data_item['t45'] * 100
     t65 = data_item['t65'] * 100
     cont_8ms = data_item["cont_8ms"] * 100
     cont_12ms = data_item["cont_12ms"] * 100
 
+    # Create lists to hold bars per category
     y_t45, y_c1, y_c2 = [], [], []
     base_t45, base_c1, base_c2 = [], [], []
 
@@ -117,9 +118,11 @@ def create_qoq_figure(data_item, categories):
         c1 = cont_8ms[i]
         c2 = cont_12ms[i]
 
+        # Initialize stacking base points
         pos_base = 0
         neg_base = 0
 
+        # Stack in order: t45, cont_8ms, cont_12ms
         if y0 >= 0:
             y_t45.append(y0)
             base_t45.append(pos_base)
@@ -149,7 +152,7 @@ def create_qoq_figure(data_item, categories):
 
     # Add stacked bars
     fig.add_trace(go.Bar(
-        x=list(range(len(categories))),
+        x=categories,
         y=y_t45,
         base=base_t45,
         name='T+45 (%)',
@@ -158,7 +161,7 @@ def create_qoq_figure(data_item, categories):
     ))
 
     fig.add_trace(go.Bar(
-        x=list(range(len(categories))),
+        x=categories,
         y=y_c1,
         base=base_c1,
         name='Contribution Early MS (pps)',
@@ -167,7 +170,7 @@ def create_qoq_figure(data_item, categories):
     ))
 
     fig.add_trace(go.Bar(
-        x=list(range(len(categories))),
+        x=categories,
         y=y_c2,
         base=base_c2,
         name='Contribution Other MS (pps)',
@@ -175,26 +178,34 @@ def create_qoq_figure(data_item, categories):
         hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
     ))
 
-    # Add horizontal black lines for T+65
-    for i, y_val in enumerate(t65):
-        fig.add_trace(go.Scatter(
-            x=[i - 0.4, i + 0.4],
-            y=[y_val, y_val],
-            mode='lines',
-            line=dict(color='black', width=3),
-            name='T+65' if i == 0 else None,
-            showlegend=(i == 0),
-            hovertemplate=f'T+65: {y_val:.3f} %<extra></extra>'
-        ))
+    # Add a dummy trace for legend entry for T+65
+    fig.add_trace(go.Scatter(
+        x=[None],
+        y=[None],
+        mode='lines',
+        line=dict(color='black', width=2),
+        name='T+65',
+        showlegend=True
+    ))
 
-    # Update x-axis to match category names
-    fig.update_xaxes(
-        tickmode='array',
-        tickvals=list(range(len(categories))),
-        ticktext=categories,
-        tickangle=-45,
-        tickfont=dict(family='Arial', size=16, color='black')
-    )
+    # Add horizontal lines using layout.shapes
+    bar_width = 0.5  # tweak this to match your bar spacing
+    fig.update_layout(shapes=[
+        dict(
+            type='line',
+            xref='x',
+            yref='y',
+            x0=cat,
+            x1=cat,
+            y0=val,
+            y1=val,
+            line=dict(color='black', width=3),
+            xanchor=cat,
+            x0_shift=-bar_width,
+            x1_shift=bar_width
+        )
+        for cat, val in zip(categories, t65)
+    ])
 
     fig.update_layout(
         barmode='relative',
@@ -204,6 +215,7 @@ def create_qoq_figure(data_item, categories):
         bargroupgap=0.1,
         title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
+        xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
         hovermode='x unified',
