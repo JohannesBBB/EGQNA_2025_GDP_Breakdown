@@ -242,7 +242,7 @@ for tab_name, tab in zip(tab_names, tabs):
         if key in data2:
             for i, data_item in enumerate(data2[key]):
                 fig = create_mean_revision_figure(data_item)
-                st.plotly_chart(fig, use_container_width=True, key=f"{rev_key}_{i}")
+                st.plotly_chart(fig, use_container_width=True, key=f"{key}_{i}")
         else:
             st.warning("No mean revision data available for this tab.")
 
@@ -250,7 +250,7 @@ for tab_name, tab in zip(tab_names, tabs):
         if key in data:
             for i, data_item in enumerate(data[key]):
                 a=1
-                #fig = create_qoq_figure(data_item)
-                #st.plotly_chart(fig, use_container_width=True, key=f"{key}_{i}")
+                fig = create_qoq_figure(data_item)
+                st.plotly_chart(fig, use_container_width=True, key=f"{key}_{i}")
         else:
             st.warning("No data available for this selection.")
