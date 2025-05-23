@@ -55,11 +55,20 @@ for tab in tab_names:
     mc1 = np.random.uniform(-0.05, 0.05, size=len(categories))
     mc2 = np.random.uniform(-0.05, 0.05, size=len(categories))
 
+    mar = np.random.uniform(0, 0.2, size=len(categories))
+    mac1 = np.random.uniform(0, 0.1, size=len(categories))
+    mac2 = np.random.uniform(0, 0.1, size=len(categories))
+
     data2[("QoQ Growth Rate", tab)] = [{
         "name": "Mean Revision",
         "Mean Revision": mr,
         "Mean Revision Early MS": mc1,
         "Mean Revision Other MS": mc2
+    },{
+        "name": "Mean Absolute Revision",
+        "Mean Revision": mar,
+        "Mean Revision Early MS": mac1,
+        "Mean Revision Other MS": mac2
     }]
 
 
