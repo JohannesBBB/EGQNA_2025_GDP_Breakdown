@@ -455,10 +455,10 @@ for tab_name, tab in zip(tab_names, tabs):
         # Determine correct category set
         if tab_name.startswith("Production"):
             categories = categories_prod
-            width_line=60
+            width_line=6
         elif tab_name.startswith("Expenditure"):
             categories = categories_exp
-            width_line=130
+            width_line=13
         else:
             categories = []
 
