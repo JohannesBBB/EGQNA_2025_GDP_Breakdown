@@ -62,8 +62,13 @@ for tab in tab_names:
     data2[("QoQ Growth Rate", tab)] = [{
     "name": "Mean Revision",
     "Mean Revision": mr,
-    "Mean Revision Early MS": mc1,
-    "Mean Revision Other MS": mc2
+    "Mean Contribution to Revision Early MS": mc1,
+    "Mean Contribution to Revision Other MS": mc2
+},{
+    "name": "Mean Revision",
+    "Mean Abs. Revision": mr,
+    "Mean Abs. Contr. to Revision Early MS": mc1,
+    "Mean Abs. Contr. to Revision Other MS": mc2
 }]
 
 
