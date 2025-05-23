@@ -227,7 +227,7 @@ for tab_name, tab in zip(tab_names, tabs):
         key = (option, tab_name)
         if key in data2:
             for i, data_item in enumerate(data2[key]):
-                fig = create_mean_revision_figure(data_item)
+                fig = create_revision_figure(data_item)
                 st.plotly_chart(fig, use_container_width=True, key=f"meanrev_{key}_{i}")
         else:
             st.warning("No mean revision data available for this tab.")
