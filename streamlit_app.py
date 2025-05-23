@@ -51,7 +51,7 @@ for tab in tab_names:
     data[("QoQ Growth Rate", tab)] = data_list
 
     # Revision data
-    mr = np.random.uniform(-0.1, 0.1, size=len(categories))
+    mr = np.random.uniform(-0.1, 5.1, size=len(categories))
     mc1 = np.random.uniform(-0.05, 0.05, size=len(categories))
     mc2 = np.random.uniform(-0.05, 0.05, size=len(categories))
 
