@@ -183,7 +183,7 @@ def create_qoq_figure(data_item, categories):
             x=[cat, cat],
             y=[t65[i], t65[i]],
             mode='lines',
-            line=dict(color='black', width=4),  # Thickness set here
+            line=dict(color='black', width=40),  # Thickness set here
             name='T+65' if i == 0 else None,
             showlegend=(i == 0),
             hovertemplate=f'T+65: {t65[i]:.3f} %<extra></extra>'
