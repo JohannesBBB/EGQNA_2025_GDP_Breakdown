@@ -125,7 +125,7 @@ def create_revision_figure(data_item, categories):
                 line=None 
             ),
             line=dict(
-                width=2, 
+                width=20, 
                 color='orange'
             ),
             name=label + " (%)",
