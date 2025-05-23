@@ -153,7 +153,7 @@ def create_revision_figure(data_item, categories):
         line_dash="solid",
         line_width=1,
         line_color="black",
-        opacity=0.5
+        opacity=1.0
     )
     return fig
 
@@ -277,7 +277,13 @@ def create_qoq_figure(data_item, categories,width_line):
             traceorder='normal'  # This respects the legendrank ordering
         )
     )
-
+    fig.add_hline(
+        y=0,
+        line_dash="solid",
+        line_width=1,
+        line_color="black",
+        opacity=1.0
+    )
     return fig
 
 
