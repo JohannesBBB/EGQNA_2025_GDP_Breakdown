@@ -76,7 +76,7 @@ def create_revision_figure(data_item, categories):
             name=label + " (%)",
             marker_color=["blue", "orange", "red", "green", "purple"][i % 5],
             offsetgroup=i,
-            hovertemplate=f"{label}: %{y:.3f} %<extra></extra>"
+            hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
 
     fig.update_layout(
@@ -90,8 +90,7 @@ def create_revision_figure(data_item, categories):
         xaxis_title="Category",
         xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=14, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=14, color='black')),
-        hoverlabel=dict(font_size=18),
-        hovermode='x unified',
+        hoverlabel=dict(font_size=14),
         legend=dict(orientation='v', yanchor='top', y=1.15, xanchor='right', x=1.0, font=dict(size=12))
     )
     return fig
