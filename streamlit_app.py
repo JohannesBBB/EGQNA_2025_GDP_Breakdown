@@ -66,9 +66,9 @@ for tab in tab_names:
         "Mean Revision Other MS": mc2
     },{
         "name": "Mean Absolute Revision",
-        "Mean Revision": mar,
-        "Mean Revision Early MS": mac1,
-        "Mean Revision Other MS": mac2
+        "Mean Absolute Revision": mar,
+        "Mean Absolute Revision Early MS": mac1,
+        "Mean Absolute Revision Other MS": mac2
     }]
 
 
