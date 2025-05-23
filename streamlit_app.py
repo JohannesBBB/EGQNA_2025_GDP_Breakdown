@@ -179,10 +179,10 @@ def create_qoq_figure(data_item, categories):
     ))
     
     fig.add_trace(go.Scatter(
-        x=categories,
-        y=t65,
-        mode='markers',
-        marker=dict(color='black', symbol='line-ew-open', size=60),
+        x=[category_start, category_end],  # e.g., ['A', 'B'] if x is categorical
+        y=[value, value],  # horizontal line at y = value
+        mode='lines',
+        line=dict(color='black', width=4),  # control thickness with width
         name='T+65',
         hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
