@@ -121,7 +121,7 @@ def create_revision_figure(data_item, categories):
             marker=dict(
                 color='red',
                 symbol='x',
-                size=12,
+                size=10,
                 line=None 
             ),
             name=label + " (%)",
