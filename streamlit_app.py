@@ -52,7 +52,7 @@ for tab in tab_names:
     mc1 = np.random.uniform(-0.05, 0.05, size=len(categories))
     mc2 = np.random.uniform(-0.05, 0.05, size=len(categories))
     
-    data2[("Mean Revision", tab)] = [{
+    data2[("QoQ Growth Rate", tab)] = [{
         "name": "Mean Revision",
         "mr": mr,
         "mc1": mc1,
@@ -238,15 +238,15 @@ tabs = st.tabs(tab_names)
 for tab_name, tab in zip(tab_names, tabs):
     with tab:
         st.header(f"{option} - {tab_name}")
-        rev_key = ("Mean Revision", tab_name)
-        if rev_key in data2:
-            for i, data_item in enumerate(data2[rev_key]):
+        key = (option, tab_name)
+        if key in data2:
+            for i, data_item in enumerate(data2[key]):
                 fig = create_mean_revision_figure(data_item)
                 st.plotly_chart(fig, use_container_width=True, key=f"{rev_key}_{i}")
         else:
             st.warning("No mean revision data available for this tab.")
 
-        key = (option, tab_name)
+
         if key in data:
             for i, data_item in enumerate(data[key]):
                 a=1
