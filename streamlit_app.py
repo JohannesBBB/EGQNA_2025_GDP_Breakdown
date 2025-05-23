@@ -182,7 +182,7 @@ def create_qoq_figure(data_item, categories):
         x=categories,
         y=t65,
         mode='markers',
-        marker=dict(color='black', symbol='line-ew-open', size=20),
+        marker=dict(color='black', symbol='line-ew-open', size=40),
         name='T+65',
         hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
