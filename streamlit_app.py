@@ -60,40 +60,54 @@ for tab in tab_names:
     mac2 = np.random.uniform(0, 0.1, size=len(categories))
 
     data2[("QoQ Growth Rate", tab)] = [{
-        "name": "Mean Revision",
-        "Mean Revision": mr,
-        "Mean Revision Early MS": mc1,
-        "Mean Revision Other MS": mc2
-    },{
-        "name": "Mean Absolute Revision",
-        "Mean Absolute Revision": mar,
-        "Mean Absolute Revision Early MS": mac1,
-        "Mean Absolute Revision Other MS": mac2
-    }]
+    "name": "Mean Revision",
+    "Mean Revision": mr,
+    "Mean Revision Early MS": {
+        "values": mc1,
+        "gap_before": True
+    },
+    "Mean Revision Other MS": mc2
+}]
 
 
 def create_revision_figure(data_item, categories):
     fig = go.Figure()
     name = data_item.get("name", "")
+    offset_index = 0
 
-    for i, (label, values) in enumerate(data_item.items()):
+    for label, value in data_item.items():
         if label == "name":
             continue
+
+        # Determine if there's a gap marker
+        if isinstance(value, dict):
+            y_vals = value["values"]
+            gap_before = value.get("gap_before", False)
+        else:
+            y_vals = value
+            gap_before = False
+
+        # Increment offset group if a gap is requested
+        if gap_before:
+            offset_index += 1  # Add gap by skipping an offset index (creates space)
+
         fig.add_trace(go.Bar(
             x=categories,
-            y=values * 100,
+            y=np.array(y_vals) * 100,
             name=label + " (%)",
-            marker_color=["blue", "green", "orange", "red", "purple"][i % 5],
-            offsetgroup=i,
+            marker_color=["blue", "green", "orange", "red", "purple"][offset_index % 5],
+            offsetgroup=offset_index,
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
+
+        offset_index += 1  # Move to next bar group
 
     fig.update_layout(
         barmode='group',
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.15,
-        bargroupgap=0.1,
+        bargroupgap=0.3,  # Wider for visible group separation
         title=dict(text=name, font=dict(size=24), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
         xaxis_title="Category",
