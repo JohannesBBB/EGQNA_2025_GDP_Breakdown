@@ -103,10 +103,10 @@ def create_revision_figure(data_item, categories):
             y=values * 100,
             mode='markers+text',
             marker=dict(
-                color='red',
+                color='orange',
                 symbol='x',
                 size=12,
-                line=dict(width=2)
+                line=None 
             ),
             name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
@@ -119,7 +119,7 @@ def create_revision_figure(data_item, categories):
             y=values * 100,
             mode='markers',
             marker=dict(
-                color='orange',
+                color='red',
                 symbol='circle-open',
                 size=12,
                 line=dict(width=2)
