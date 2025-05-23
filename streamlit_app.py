@@ -83,7 +83,7 @@ def create_revision_figure(data_item, categories):
             x=categories,
             y=values * 100,
             name=label + " (%)",
-            marker_color=["blue", "orange", "red", "green", "purple"][i % 5],
+            marker_color=["blue", "green", "orange", "red", "purple"][i % 5],
             offsetgroup=i,
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
         ))
