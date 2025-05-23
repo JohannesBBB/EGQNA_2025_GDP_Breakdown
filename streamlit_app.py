@@ -54,44 +54,31 @@ for tab in tab_names:
     
     data2[("QoQ Growth Rate", tab)] = [{
         "name": "Mean Revision",
-        "mr": mr,
-        "mc1": mc1,
-        "mc2": mc2
+        "Mean Revision": mr,
+        "Mean Revision Early MS": mc1,
+        "Mean Revision Other MS": mc2
     }]
 
 
 
 categories = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L', 'M_N', 'OTQ', 'RTU']
 
-def create_mean_revision_figure(data_item):
+def create_revision_figure(data_item):
     fig = go.Figure()
 
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=data_item['mr'] * 100,
-        name='Mean Revision (%)',
-        marker_color='blue',
-        offsetgroup=0,
-        hovertemplate='Mean Revision: %{y:.3f} %<extra></extra>'
-    ))
+    name = data_item.get("name", "")
+    for i, (label, values) in enumerate(data_item.items()):
+        if label == "name":
+            continue  # Skip the 'name' field
 
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=data_item['mc1'] * 100,
-        name='Mean Contribution 1 (%)',
-        marker_color='orange',
-        offsetgroup=1,
-        hovertemplate='MC1: %{y:.3f} %<extra></extra>'
-    ))
-
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=data_item['mc2'] * 100,
-        name='Mean Contribution 2 (%)',
-        marker_color='red',
-        offsetgroup=2,
-        hovertemplate='MC2: %{y:.3f} %<extra></extra>'
-    ))
+        fig.add_trace(go.Bar(
+            x=categories,
+            y=values * 100,
+            name=label + " (%)",
+            marker_color=["blue", "orange", "red", "green", "purple"][i % 5],  # Add more if needed
+            offsetgroup=i,
+            hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
+        ))
 
     fig.update_layout(
         barmode='group',
@@ -100,7 +87,7 @@ def create_mean_revision_figure(data_item):
         bargap=0.15,
         bargroupgap=0.1,
         title=dict(
-            text=data_item.get("name", ""),
+            text=name,
             font=dict(size=24),
             x=0.5,
             xanchor='center'
@@ -127,7 +114,6 @@ def create_mean_revision_figure(data_item):
         )
     )
     return fig
-
 
 
 def create_qoq_figure(data_item):
