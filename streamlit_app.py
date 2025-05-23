@@ -178,15 +178,18 @@ def create_qoq_figure(data_item, categories):
         hovertemplate='Contribution Other MS: %{y:.3f} pps<extra></extra>'
     ))
     
-    for i, cat in enumerate(categories):
-        fig.add_trace(go.Scatter(
-            x=[cat, cat],
-            y=[t65[i], t65[i]],
-            mode='lines',
-            line=dict(color='black', width=40),  # Thickness set here
-            name='T+65' if i == 0 else None,
-            showlegend=(i == 0),
-            hovertemplate=f'T+65: {t65[i]:.3f} %<extra></extra>'
+    fig.add_trace(go.Scatter(
+        x=categories,
+        y=t65,
+        mode='markers',
+        marker=dict(
+            color='black',
+            symbol='line-ew-open',
+            size=60,
+            line=dict(width=3)  # Adjust this value to make the line thicker
+        ),
+        name='T+65',
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>'
     ))
 
     fig.update_layout(
