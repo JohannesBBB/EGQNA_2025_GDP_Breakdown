@@ -106,7 +106,7 @@ def create_revision_figure(data_item, categories):
                 color='orange',
                 symbol='circle-open',
                 size=12,
-                line=dict(width=2)
+                line=dict(width=3)
             ),
             name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
@@ -122,7 +122,7 @@ def create_revision_figure(data_item, categories):
                 color='red',
                 symbol='x-thin-open',
                 size=12,
-                line=dict(width=3)
+                line=dict(width=2)
             ),
             name=label + " (%)",
             hovertemplate=f"{label}: "+"%{y:.3f} %<extra></extra>"
