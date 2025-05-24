@@ -313,80 +313,57 @@ def create_qoq_figure(data_item, categories,width_line):
 def create_GO_One_figure(data_item, categories, width_line):
     fig = go.Figure()
     
-    # Convert to percentages
     t45_1 = data_item['t45_1'] * 100
     t45_2 = data_item['t45_2'] * 100
     t65 = data_item['t65'] * 100
-    dif_1 = data_item['dif_1'] * 100  # t45_1 - t65
-    dif_2 = data_item['dif_2'] * 100  # t45_2 - t45_1
+    dif_1 = data_item["dif_1"] * 100
+    dif_2 = data_item["dif_2"] * 100
 
-    # Create modified categories for side-by-side display
-    modified_categories = []
-    for cat in categories:
-        modified_categories.extend([f"{cat}_1", f"{cat}_2"])
+    # Create lists to hold bars per category
+    y_t45, y_c1 = [], []
+    base_t45, base_c1 = [], []
 
-    # Prepare data for plotting
-    bar1_values = []
-    bar1_diff = []
-    bar2_values = []
-    bar2_diff = []
-    
     for i in range(len(categories)):
-        bar1_values.extend([t45_1[i], None])  # First bar pair
-        bar1_diff.extend([dif_1[i], None])
-        bar2_values.extend([None, t45_2[i]])  # Second bar pair
-        bar2_diff.extend([None, dif_2[i]])
+        y0 = t45_1[i]
+        c1 = dif_1[i]
 
-    # Add first set of bars (t45_1 and dif_1)
+        # Initialize stacking base points
+        pos_base = 0
+        neg_base = 0
+
+        if y0 >= 0:
+            y_t45.append(y0)
+            base_t45.append(pos_base)
+            pos_base += y0
+        else:
+            y_t45.append(y0)
+            base_t45.append(neg_base)
+            neg_base += y0
+
+        if c1 >= 0:
+            y_c1.append(c1)
+            base_c1.append(pos_base)
+            pos_base += c1
+        else:
+            y_c1.append(c1)
+            base_c1.append(neg_base)
+            neg_base += c1
+
+
     fig.add_trace(go.Bar(
-        x=modified_categories,
-        y=bar1_values,
-        name='T+45_1 (%)',
+        x=categories,
+        y=y_t45,
+        base=base_t45,
+        name='T+45 (%)',
         marker_color='blue',
-        hovertemplate='T+45_1: %{y:.3f} %<extra></extra>',
-        legendrank=1
-    ))
-    
-    fig.add_trace(go.Bar(
-        x=modified_categories,
-        y=bar1_diff,
-        name='Diff to T+65',
-        marker_color='lightblue',
-        hovertemplate='Diff to T+65: %{y:.3f} %<extra></extra>',
-        legendrank=2,
-        base=bar1_values
+        hovertemplate='T+45: %{y:.3f} %<extra></extra>',
+        legendrank=1  # First in legend
     ))
 
-    # Add second set of bars (t45_2 and dif_2)
-    fig.add_trace(go.Bar(
-        x=modified_categories,
-        y=bar2_values,
-        name='T+45_2 (%)',
-        marker_color='green',
-        hovertemplate='T+45_2: %{y:.3f} %<extra></extra>',
-        legendrank=3
-    ))
-    
-    fig.add_trace(go.Bar(
-        x=modified_categories,
-        y=bar2_diff,
-        name='Diff to T+45_1',
-        marker_color='lightgreen',
-        hovertemplate='Diff to T+45_1: %{y:.3f} %<extra></extra>',
-        legendrank=4,
-        base=bar2_values
-    ))
-
-    # Add T+65 markers (two markers per category)
-    t65_markers = []
-    t65_positions = []
-    for i in range(len(categories)):
-        t65_markers.extend([t65[i], t65[i]])
-        t65_positions.extend([f"{categories[i]}_1", f"{categories[i]}_2"])
-    
+    # Add T+65 scatter next (will appear second in legend but on top visually)
     fig.add_trace(go.Scatter(
-        x=t65_positions,
-        y=t65_markers,
+        x=categories,
+        y=t65,
         mode='markers',
         marker=dict(
             color='black',
@@ -396,23 +373,30 @@ def create_GO_One_figure(data_item, categories, width_line):
         ),
         name='T+65',
         hovertemplate='T+65: %{y:.3f} %<extra></extra>',
-        legendrank=5
+        legendrank=2  # Second in legend
     ))
 
-    # Update layout
+    # Add remaining bars (will appear after in legend)
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c1,
+        base=base_c1,
+        name='Contribution Early MS (pps)',
+        marker_color='orange',
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
+        legendrank=3  # Third in legend
+    ))
+
+
     fig.update_layout(
-        barmode='group',
+        barmode='relative',
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
-        bargap=0.3,  # Increased gap for better separation
+        bargap=0.15,
+        bargroupgap=0.1,
         title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
-        xaxis=dict(
-            tickvals=modified_categories[::2],  # Show only original category names
-            ticktext=categories,
-            tickangle=-45,
-            tickfont=dict(family='Arial', size=16, color='black')
-        ),
+        xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
         hovermode='x unified',
@@ -423,20 +407,16 @@ def create_GO_One_figure(data_item, categories, width_line):
             xanchor='right',
             x=1.0,
             font=dict(size=12),
-            traceorder='normal'
+            traceorder='normal'  # This respects the legendrank ordering
         )
     )
-    
-    # Add zero line
     fig.add_hline(
         y=0,
         line_dash="solid",
         line_width=1,
         line_color="black",
-        opacity=0.8,
-        layer='below'
+        opacity=0.8
     )
-    
     return fig
 
 
