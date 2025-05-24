@@ -383,17 +383,6 @@ def create_GO_One_figure(data_item, categories, width_line):
         offsetgroup=0
     ))
 
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_c1,
-        base=[b + y for b, y in zip(base_t45, y_t45)],
-        name='Diff to T+65 (1)',
-        marker_color='lightblue',
-        hovertemplate='Diff to T+65 (1): %{y:.3f}%<extra></extra>',
-        legendrank=2,
-        offsetgroup=0
-    ))
-
     # Second stacked bar group (right)
     fig.add_trace(go.Bar(
         x=categories,
@@ -402,17 +391,28 @@ def create_GO_One_figure(data_item, categories, width_line):
         name='T+45 (2)',
         marker_color='green',
         hovertemplate='T+45 (2): %{y:.3f}%<extra></extra>',
-        legendrank=3,
+        legendrank=2,
         offsetgroup=1
+    ))
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c1,
+        base=[b + y for b, y in zip(base_t45, y_t45)],
+        name='Difference to T+65 (1)',
+        marker_color='orange',
+        hovertemplate='Difference to T+65 (1): %{y:.3f}%<extra></extra>',
+        legendrank=3,
+        offsetgroup=0
     ))
 
     fig.add_trace(go.Bar(
         x=categories,
         y=y_c2,
         base=[b + y for b, y in zip(base_t45_2, y_t45_2)],
-        name='Diff to T+65 (2)',
-        marker_color='lightgreen',
-        hovertemplate='Diff to T+65 (2): %{y:.3f}%<extra></extra>',
+        name='Difference to T+65 (2)',
+        marker_color='orange',
+        hovertemplate='Difference to T+65 (2): %{y:.3f}%<extra></extra>',
         legendrank=4,
         offsetgroup=1
     ))
@@ -482,10 +482,10 @@ for tab_name, tab in zip(tab_names, tabs):
         # Determine correct category set
         if tab_name.startswith("Production"):
             categories = categories_prod
-            width_line=6
+            width_line=60
         elif tab_name.startswith("Expenditure"):
             categories = categories_exp
-            width_line=13
+            width_line=130
         else:
             categories = []
 
