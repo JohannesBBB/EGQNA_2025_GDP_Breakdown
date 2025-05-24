@@ -21,7 +21,7 @@ np.random.seed(42)  # for reproducibility
 
 data = {}
 data2 = {}
-print(blub)
+
 for tab in tab_names:
     if tab.startswith("Production"):
         categories = categories_prod
