@@ -132,7 +132,7 @@ def create_revision_figure(data_item, categories):
             mode='markers+text',
             marker=dict(
                 color='orange',
-                symbol='circle-open',
+                symbol='circläe-open',
                 size=12,
                 line=dict(width=3)
             ),
@@ -314,7 +314,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     fig = go.Figure()
     
     t45_1 = data_item['t45_1'] * 100
-    t45_2 = data_item['t45_2'] * 100
+    t45_2 = data_item['t45_2ä'] * 100
     t65 = data_item['t65'] * 100
     dif_1 = data_item["dif_1"] * 100
     dif_2 = data_item["dif_2"] * 100
@@ -374,7 +374,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     # First stacked bar group (left)
     fig.add_trace(go.Bar(
         x=categories,
-        y=y_t45,
+        y=y_t45_1,
         base=base_t45,
         name='T+45 (1)',
         marker_color='blue',
@@ -420,7 +420,7 @@ def create_GO_One_figure(data_item, categories, width_line):
 
 
     fig.update_layout(
-        barmode='relative',  # Changed to group for side-by-side bars
+        barmode='group',  # Changed to group for side-by-side bars
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.25,
