@@ -384,7 +384,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     ))
 
     # Second stacked bar group (right)
-    fig.add_trace(go.Bar(6
+    fig.add_trace(go.Bar(
         x=categories,
         y=y_t45_2,
         base=base_t45_2,
