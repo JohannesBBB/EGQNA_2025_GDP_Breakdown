@@ -8,7 +8,7 @@ import streamlit as st
 import plotly.graph_objs as go
 import numpy as np
 
-st.set_page_config(layout="wide")
+    st.set_page_config(layout="wide")
 
 # Define category sets
 categories_prod = ['B1GQ', 'B1G', 'D21X31', 'A', 'BTE', 'C', 'F', 'GTI', 'J', 'K', 'L', 'M_N', 'OTQ', 'RTU']
