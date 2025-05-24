@@ -374,118 +374,97 @@ def create_GO_One_figure(data_item, categories, width_line):
             neg_base_2 += c2
 
 
-fig = go.Figure()
-
-# --- First stacked bar group (left side) ---
-fig.add_trace(go.Bar(
-    x=categories,
-    y=y_t45,
-    base=base_t45,
-    name='T+45 (%)',
-    marker_color='blue',
-    hovertemplate='T+45: %{y:.3f} %<extra></extra>',
-    offsetgroup='1',
-    legendgroup='T+45',
-    showlegend=True
-))
-
-fig.add_trace(go.Bar(
-    x=categories,
-    y=y_c1,
-    base=base_c1,
-    name='Contribution Early MS (pps)',
-    marker_color='orange',
-    hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
-    offsetgroup='1',
-    legendgroup='Contribution Early MS',
-    showlegend=True
-))
-
-# --- Second stacked bar group (right side) ---
-fig.add_trace(go.Bar(
-    x=categories,
-    y=y_t45_2,
-    base=base_t45_2,
-    name='T+45 (%)',
-    marker_color='green',
-    hovertemplate='T+45 (2): %{y:.3f} %<extra></extra>',
-    offsetgroup='2',
-    legendgroup='T+45',
-    showlegend=False
-))
-
-fig.add_trace(go.Bar(
-    x=categories,
-    y=y_c2,
-    base=base_c2,
-    name='Contribution Early MS (pps)',
-    marker_color='red',
-    hovertemplate='Contribution Early MS (2): %{y:.3f} pps<extra></extra>',
-    offsetgroup='2',
-    legendgroup='Contribution Early MS',
-    showlegend=False
-))
-
-# --- Add black horizontal T+65 line (applies to both groups) ---
-fig.add_trace(go.Scatter(
-    x=categories,
-    y=t65,
-    mode='markers',
-    marker=dict(
-        color='black',
-        symbol='line-ew-open',  # Horizontal line symbol
-        size=width_line,        # You can adjust this
-    ),
-    name='T+65',
-    hovertemplate='T+65: %{y:.3f} %<extra></extra>',
-    legendrank=2,
-    legendgroup='T+65',
-    showlegend=True
-))
-
-# --- Final layout ---
-fig.update_layout(
-    barmode='relative',
-    bargap=0.2,
-    bargroupgap=0.05,
-    height=500,
-    title=dict(text='Your Chart Title', font=dict(size=24), x=0.5),
-    yaxis_title="Percentage (%)",
-    hovermode='x',
-    legend=dict(
-        orientation='v',
-        yanchor='top',
-        y=1,
-        xanchor='left',
-        x=1.02,
-        font=dict(size=12),
-        traceorder='normal'
-    )
-)
-
-
+    fig = go.Figure()
+    
+    # --- First stacked bar group (left side) ---
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_t45,
+        base=base_t45,
+        name='T+45 (%)',
+        marker_color='blue',
+        hovertemplate='T+45: %{y:.3f} %<extra></extra>',
+        offsetgroup='1',
+        legendgroup='T+45',
+        showlegend=True
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c1,
+        base=base_c1,
+        name='Contribution Early MS (pps)',
+        marker_color='orange',
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
+        offsetgroup='1',
+        legendgroup='Contribution Early MS',
+        showlegend=True
+    ))
+    
+    # --- Second stacked bar group (right side) ---
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_t45_2,
+        base=base_t45_2,
+        name='T+45 (%)',
+        marker_color='green',
+        hovertemplate='T+45 (2): %{y:.3f} %<extra></extra>',
+        offsetgroup='2',
+        legendgroup='T+45',
+        showlegend=False
+    ))
+    
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c2,
+        base=base_c2,
+        name='Contribution Early MS (pps)',
+        marker_color='red',
+        hovertemplate='Contribution Early MS (2): %{y:.3f} pps<extra></extra>',
+        offsetgroup='2',
+        legendgroup='Contribution Early MS',
+        showlegend=False
+    ))
+    
+    # --- Add black horizontal T+65 line (applies to both groups) ---
+    fig.add_trace(go.Scatter(
+        x=categories,
+        y=t65,
+        mode='markers',
+        marker=dict(
+            color='black',
+            symbol='line-ew-open',  # Horizontal line symbol
+            size=width_line,        # You can adjust this
+        ),
+        name='T+65',
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
+        legendrank=2,
+        legendgroup='T+65',
+        showlegend=True
+    ))
+    
+    # --- Final layout ---
     fig.update_layout(
         barmode='relative',
+        bargap=0.2,
+        bargroupgap=0.05,
         height=500,
-        margin=dict(l=200, r=200, t=80, b=80),
-        bargap=0.15,
-        bargroupgap=0.1,
-        title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
+        title=dict(text='Your Chart Title', font=dict(size=24), x=0.5),
         yaxis_title="Percentage (%)",
-        xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
-        yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
-        hoverlabel=dict(font_size=18),
-        hovermode='x unified',
+        hovermode='x',
         legend=dict(
             orientation='v',
-            yanchor='bottom',
+            yanchor='top',
             y=1,
-            xanchor='right',
-            x=1.0,
+            xanchor='left',
+            x=1.02,
             font=dict(size=12),
-            traceorder='normal'  # This respects the legendrank ordering
+            traceorder='normal'
         )
     )
+
+
+
     fig.add_hline(
         y=0,
         line_dash="solid",
