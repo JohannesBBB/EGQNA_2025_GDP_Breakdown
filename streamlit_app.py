@@ -404,8 +404,8 @@ def create_GO_One_figure(data_item, categories, width_line):
         marker_color='orange',
         hovertext=[f'Difference to T+65 (1): {val:.3f}%' for val in y_c1],
         hoverinfo='text',
-        legendrank=3,
-        offsetgroup=2
+        legendrank=4,
+        offsetgroup=0
     ))
     
     fig.add_trace(go.Bar(
@@ -416,8 +416,25 @@ def create_GO_One_figure(data_item, categories, width_line):
         marker_color='red',
         hovertext=[f'Difference to T+65 (2): {val:.3f}%' for val in y_c2],
         hoverinfo='text',
-        legendrank=4,
-        offsetgroup=3
+        legendrank=5,
+        offsetgroup=1
+    ))
+    
+    fig.add_trace(go.Scatter(
+        x=categories,
+        y=t65,
+        mode='markers',
+        marker=dict(
+            color='black',
+            symbol='line-ew-open',
+            size=width_line,
+            line=dict(width=4)
+        ),
+        name='T+65',
+        hovertext=[f'T+65: {val:.3f}%' for val in t65],
+        hoverinfo='text',
+        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
+        legendrank=3  # Second in legend
     ))
     
     fig.update_layout(
