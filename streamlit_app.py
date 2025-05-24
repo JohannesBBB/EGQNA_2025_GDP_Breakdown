@@ -315,10 +315,9 @@ def create_GO_One_figure(data_item, categories, width_line):
 
     # Expanded categories for side-by-side bars
     categories_expanded = []
-    categories_display = []
     for cat in categories:
-        categories_expanded.extend([cat, f"{cat}_2"])
-        categories_display.append(cat)
+        categories_expanded.append(cat)
+        categories_expanded.append(f"{cat}_2")
 
     # Original data * 100
     t45_1 = data_item['t45_1'] * 100
