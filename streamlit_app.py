@@ -443,31 +443,6 @@ def create_GO_One_figure(data_item, categories, width_line):
     )
     return fig
 
-All I want is a separate bar next to the existing one
-
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_t45_2,
-        base=base_t45_2,
-        name='T+45 (%) (2)',
-        marker_color='blue',
-        hovertemplate='T+45 (2): %{y:.3f} %<extra></extra>',
-        legendrank=1  # First in legend
-    ))
-
-    # Add remaining bars (will appear after in legend)
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_c2,
-        base=base_c2,
-        name='Contribution Early MS (pps) (2)',
-        marker_color='orange',
-        hovertemplate='Contribution Early MS (2): %{y:.3f} pps<extra></extra>',
-        legendrank=2  # Third in legend
-    ))
-
-
-
 # --- Streamlit UI ---
 st.title("Early Breakdown Estimations")
 
