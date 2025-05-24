@@ -444,7 +444,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
-        hovermode='closest',
+        hovermode='x-unified',
         legend=dict(
             orientation='v',
             yanchor='bottom',
