@@ -314,7 +314,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     fig = go.Figure()
     
     t45_1 = data_item['t45_1'] * 100
-    t45_2 = data_item['t45_2ä'] * 100
+    t45_2 = data_item['t45_2'] * 100
     t65 = data_item['t65'] * 100
     dif_1 = data_item["dif_1"] * 100
     dif_2 = data_item["dif_2"] * 100
@@ -374,7 +374,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     # First stacked bar group (left)
     fig.add_trace(go.Bar(
         x=categories,
-        y=y_t45_1,
+        y=y_t45,
         base=base_t45,
         name='T+45 (1)',
         marker_color='blue',
@@ -403,7 +403,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         marker_color='orange',
         hovertemplate='Difference to T+65 (1): %{y:.3f}%<extra></extra>',
         legendrank=3,
-        offsetgroup=0
+        offsetgroup=2
     ))
 
     fig.add_trace(go.Bar(
@@ -414,7 +414,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         marker_color='red',
         hovertemplate='Difference to T+65 (2): %{y:.3f}%<extra></extra>',
         legendrank=4,
-        offsetgroup=1
+        offsetgroup=3
     ))
 
 
