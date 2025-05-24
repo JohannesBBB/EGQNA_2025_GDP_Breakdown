@@ -320,8 +320,8 @@ def create_GO_One_figure(data_item, categories, width_line):
     dif_2 = data_item["dif_2"] * 100
 
     # Create lists to hold bars per category
-    y_t45, y_t45_2, y_c1, y_c2 = [], [], [], []
-    base_t45, base_t45_2, base_c1, base_c2 = [], [], [], []
+    y_t45_1, y_t45_2, y_c1, y_c2 = [], [], [], []
+    base_t45_1, base_t45_2, base_c1, base_c2 = [], [], [], []
 
     for i in range(len(categories)):
         # First set (t45_1)
@@ -333,35 +333,41 @@ def create_GO_One_figure(data_item, categories, width_line):
         c2 = dif_2[i]
 
         # Stack first set
+        pos_base = neg_base = 0
         if y0 >= 0:
-            y_t45.append(y0)
-            base_t45.append(0)
+            y_t45_1.append(y0)
+            base_t45_1.append(pos_base)
+            pos_base += y0
             y_c1.append(c1)
-            base_c1.append(y0)
+            base_c1.append(pos_base)
         else:
-            y_t45.append(y0)
-            base_t45.append(0)
+            y_t45_1.append(y0)
+            base_t45_1.append(neg_base)
+            neg_base += y0
             y_c1.append(c1)
-            base_c1.append(y0)
+            base_c1.append(neg_base)
 
         # Stack second set
+        pos_base = neg_base = 0
         if y0_2 >= 0:
             y_t45_2.append(y0_2)
-            base_t45_2.append(0)
+            base_t45_2.append(pos_base)
+            pos_base += y0_2
             y_c2.append(c2)
-            base_c2.append(y0_2)
+            base_c2.append(pos_base)
         else:
             y_t45_2.append(y0_2)
-            base_t45_2.append(0)
+            base_t45_2.append(neg_base)
+            neg_base += y0_2
             y_c2.append(c2)
-            base_c2.append(y0_2)
+            base_c2.append(neg_base)
 
-    # First bar group (t45_1)
+    # First stacked bar group (left)
     fig.add_trace(go.Bar(
         x=categories,
-        y=y_t45,
-        base=base_t45,
-        name='T+45_1',
+        y=y_t45_1,
+        base=base_t45_1,
+        name='T+45_1 (%)',
         marker_color='blue',
         hovertemplate='T+45_1: %{y:.3f}%<extra></extra>',
         legendrank=1,
@@ -371,7 +377,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     fig.add_trace(go.Bar(
         x=categories,
         y=y_c1,
-        base=[b + y for b, y in zip(base_t45, y_t45)],
+        base=[b + y for b, y in zip(base_t45_1, y_t45_1)],
         name='Diff to T+65',
         marker_color='lightblue',
         hovertemplate='Diff to T+65: %{y:.3f}%<extra></extra>',
@@ -379,12 +385,12 @@ def create_GO_One_figure(data_item, categories, width_line):
         offsetgroup=0
     ))
 
-    # Second bar group (t45_2)
+    # Second stacked bar group (right)
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45_2,
         base=base_t45_2,
-        name='T+45_2',
+        name='T+45_2 (%)',
         marker_color='green',
         hovertemplate='T+45_2: %{y:.3f}%<extra></extra>',
         legendrank=3,
@@ -415,35 +421,21 @@ def create_GO_One_figure(data_item, categories, width_line):
         ),
         name='T+65',
         hovertemplate='T+65: %{y:.3f}%<extra></extra>',
-        legendrank=5,
-        showlegend=True
-    ))
-
-    # Hidden duplicate for hover purposes
-    fig.add_trace(go.Scatter(
-        x=categories,
-        y=t65,
-        mode='markers',
-        marker=dict(
-            color='black',
-            symbol='line-ew-open',
-            size=width_line,
-            line=dict(width=4)
-        ),
-        hoverinfo='skip',
-        showlegend=False
+        legendrank=5
     ))
 
     fig.update_layout(
         barmode='group',
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
-        bargap=0.3,
+        bargap=0.25,
+        bargroupgap=0.1,
         title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
         xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
+        hovermode='closest',  # Changed to closest for individual hovers
         legend=dict(
             orientation='v',
             yanchor='bottom',
