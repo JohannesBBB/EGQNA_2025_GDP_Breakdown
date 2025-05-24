@@ -420,7 +420,7 @@ def create_GO_One_figure(data_item, categories, width_line):
 
 
     fig.update_layout(
-        barmode='group',  # Changed to group for side-by-side bars
+        barmode='relative',  # Changed to group for side-by-side bars
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.25,
