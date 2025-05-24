@@ -312,7 +312,7 @@ def create_qoq_figure(data_item, categories,width_line):
 
 def create_GO_One_figure(data_item, categories, width_line):
     fig = go.Figure()
-    
+
     t45_1 = data_item['t45_1'] * 100
     t45_2 = data_item['t45_2'] * 100
     t65 = data_item['t65'] * 100
@@ -326,14 +326,12 @@ def create_GO_One_figure(data_item, categories, width_line):
     for i in range(len(categories)):
         y0 = t45_1[i]
         c1 = dif_1[i]
-        
+
         y0_2 = t45_2[i]
         c2 = dif_2[i]
 
-        # Initialize stacking base points
         pos_base = 0
         neg_base = 0
-
         pos_base_2 = 0
         neg_base_2 = 0
 
@@ -345,7 +343,7 @@ def create_GO_One_figure(data_item, categories, width_line):
             y_t45.append(y0)
             base_t45.append(neg_base)
             neg_base += y0
-            
+
         if y0_2 >= 0:
             y_t45_2.append(y0_2)
             base_t45_2.append(pos_base_2)
@@ -363,7 +361,7 @@ def create_GO_One_figure(data_item, categories, width_line):
             y_c1.append(c1)
             base_c1.append(neg_base)
             neg_base += c1
-            
+
         if c2 >= 0:
             y_c2.append(c2)
             base_c2.append(pos_base_2)
@@ -373,7 +371,7 @@ def create_GO_One_figure(data_item, categories, width_line):
             base_c2.append(neg_base_2)
             neg_base_2 += c2
 
-
+    # Original bars
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45,
@@ -381,10 +379,24 @@ def create_GO_One_figure(data_item, categories, width_line):
         name='T+45 (%)',
         marker_color='blue',
         hovertemplate='T+45: %{y:.3f} %<extra></extra>',
-        legendrank=1  # First in legend
+        legendrank=1,
+        offsetgroup='original',
+        legendgroup='original'
     ))
 
-    # Add T+65 scatter next (will appear second in legend but on top visually)
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c1,
+        base=base_c1,
+        name='Contribution Early MS (pps)',
+        marker_color='orange',
+        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
+        legendrank=3,
+        offsetgroup='original',
+        legendgroup='original'
+    ))
+
+    # T+65 Scatter (remains unchanged)
     fig.add_trace(go.Scatter(
         x=categories,
         y=t65,
@@ -397,21 +409,35 @@ def create_GO_One_figure(data_item, categories, width_line):
         ),
         name='T+65',
         hovertemplate='T+65: %{y:.3f} %<extra></extra>',
-        legendrank=2  # Second in legend
+        legendrank=2
     ))
 
-    # Add remaining bars (will appear after in legend)
+    # Additional bars: test (value=1) and test2 (value=0.5)
     fig.add_trace(go.Bar(
         x=categories,
-        y=y_c1,
-        base=base_c1,
-        name='Contribution Early MS (pps)',
-        marker_color='orange',
-        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
-        legendrank=3  # Third in legend
+        y=[1] * len(categories),
+        base=[0] * len(categories),
+        name='test',
+        marker_color='green',
+        hovertemplate='test: %{y:.3f} <extra></extra>',
+        legendrank=4,
+        offsetgroup='testgroup',
+        legendgroup='testgroup'
     ))
 
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=[0.5] * len(categories),
+        base=[1] * len(categories),  # Stack on top of the previous 1
+        name='test2',
+        marker_color='lightgreen',
+        hovertemplate='test2: %{y:.3f} <extra></extra>',
+        legendrank=5,
+        offsetgroup='testgroup',
+        legendgroup='testgroup'
+    ))
 
+    # Layout settings
     fig.update_layout(
         barmode='relative',
         height=500,
@@ -431,9 +457,10 @@ def create_GO_One_figure(data_item, categories, width_line):
             xanchor='right',
             x=1.0,
             font=dict(size=12),
-            traceorder='normal'  # This respects the legendrank ordering
+            traceorder='normal'
         )
     )
+
     fig.add_hline(
         y=0,
         line_dash="solid",
@@ -441,7 +468,9 @@ def create_GO_One_figure(data_item, categories, width_line):
         line_color="black",
         opacity=0.8
     )
+
     return fig
+
 
 # --- Streamlit UI ---
 st.title("Early Breakdown Estimations")
