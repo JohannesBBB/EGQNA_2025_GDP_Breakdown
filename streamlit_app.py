@@ -324,64 +324,46 @@ def create_GO_One_figure(data_item, categories, width_line):
     base_t45, base_t45_2, base_c1, base_c2 = [], [], [], []
 
     for i in range(len(categories)):
+        # First set (t45_1)
         y0 = t45_1[i]
         c1 = dif_1[i]
         
+        # Second set (t45_2)
         y0_2 = t45_2[i]
         c2 = dif_2[i]
 
-        # Initialize stacking base points
-        pos_base = 0
-        neg_base = 0
-
-        pos_base_2 = 0
-        neg_base_2 = 0
-
+        # Stack first set
         if y0 >= 0:
             y_t45.append(y0)
-            base_t45.append(pos_base)
-            pos_base += y0
+            base_t45.append(0)
+            y_c1.append(c1)
+            base_c1.append(y0)
         else:
             y_t45.append(y0)
-            base_t45.append(neg_base)
-            neg_base += y0
-            
+            base_t45.append(0)
+            y_c1.append(c1)
+            base_c1.append(y0)
+
+        # Stack second set
         if y0_2 >= 0:
             y_t45_2.append(y0_2)
-            base_t45_2.append(pos_base_2)
-            pos_base_2 += y0_2
+            base_t45_2.append(0)
+            y_c2.append(c2)
+            base_c2.append(y0_2)
         else:
             y_t45_2.append(y0_2)
-            base_t45_2.append(neg_base_2)
-            neg_base_2 += y0_2
-
-        if c1 >= 0:
-            y_c1.append(c1)
-            base_c1.append(pos_base)
-            pos_base += c1
-        else:
-            y_c1.append(c1)
-            base_c1.append(neg_base)
-            neg_base += c1
-            
-        if c2 >= 0:
+            base_t45_2.append(0)
             y_c2.append(c2)
-            base_c2.append(pos_base_2)
-            pos_base_2 += c2
-        else:
-            y_c2.append(c2)
-            base_c2.append(neg_base_2)
-            neg_base_2 += c2
+            base_c2.append(y0_2)
 
-
-    # Add first set of bars with offsetgroup=0
+    # First bar group (t45_1)
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45,
         base=base_t45,
-        name='T+45_1 (%)',
+        name='T+45_1',
         marker_color='blue',
-        hovertemplate='T+45_1: %{y:.3f} %<extra></extra>',
+        hovertemplate='T+45_1: %{y:.3f}%<extra></extra>',
         legendrank=1,
         offsetgroup=0
     ))
@@ -392,19 +374,19 @@ def create_GO_One_figure(data_item, categories, width_line):
         base=[b + y for b, y in zip(base_t45, y_t45)],
         name='Diff to T+65',
         marker_color='lightblue',
-        hovertemplate='Diff to T+65: %{y:.3f} %<extra></extra>',
+        hovertemplate='Diff to T+65: %{y:.3f}%<extra></extra>',
         legendrank=2,
         offsetgroup=0
     ))
 
-    # Add second set of bars with offsetgroup=1
+    # Second bar group (t45_2)
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45_2,
         base=base_t45_2,
-        name='T+45_2 (%)',
+        name='T+45_2',
         marker_color='green',
-        hovertemplate='T+45_2: %{y:.3f} %<extra></extra>',
+        hovertemplate='T+45_2: %{y:.3f}%<extra></extra>',
         legendrank=3,
         offsetgroup=1
     ))
@@ -415,12 +397,12 @@ def create_GO_One_figure(data_item, categories, width_line):
         base=[b + y for b, y in zip(base_t45_2, y_t45_2)],
         name='Diff to T+45_1',
         marker_color='lightgreen',
-        hovertemplate='Diff to T+45_1: %{y:.3f} %<extra></extra>',
+        hovertemplate='Diff to T+45_1: %{y:.3f}%<extra></extra>',
         legendrank=4,
         offsetgroup=1
     ))
 
-    # Add T+65 markers (show in legend only once)
+    # T+65 markers (single legend entry)
     fig.add_trace(go.Scatter(
         x=categories,
         y=t65,
@@ -432,12 +414,12 @@ def create_GO_One_figure(data_item, categories, width_line):
             line=dict(width=4)
         ),
         name='T+65',
-        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
+        hovertemplate='T+65: %{y:.3f}%<extra></extra>',
         legendrank=5,
         showlegend=True
     ))
 
-    # Add invisible duplicate of T+65 to appear on hover for both bar groups
+    # Hidden duplicate for hover purposes
     fig.add_trace(go.Scatter(
         x=categories,
         y=t65,
@@ -448,24 +430,20 @@ def create_GO_One_figure(data_item, categories, width_line):
             size=width_line,
             line=dict(width=4)
         ),
-        name='T+65',  # Same name as above
-        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
-        legendrank=5,
-        showlegend=False  # Hidden from legend
+        hoverinfo='skip',
+        showlegend=False
     ))
 
     fig.update_layout(
-        barmode='group',  # Changed to group for side-by-side bars
+        barmode='group',
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
-        bargap=0.25,  # Increased gap for better separation
-        bargroupgap=0.1,
+        bargap=0.3,
         title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
         xaxis=dict(tickangle=-45, tickfont=dict(family='Arial', size=16, color='black')),
         yaxis=dict(tickfont=dict(family='Arial', size=16, color='black')),
         hoverlabel=dict(font_size=18),
-        hovermode='x unified',
         legend=dict(
             orientation='v',
             yanchor='bottom',
@@ -484,6 +462,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         line_color="black",
         opacity=0.8
     )
+    
     return fig
 
 
