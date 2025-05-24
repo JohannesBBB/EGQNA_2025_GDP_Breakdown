@@ -326,17 +326,14 @@ def create_GO_One_figure(data_item, categories, width_line):
     for i in range(len(categories)):
         y0 = t45_1[i]
         c1 = dif_1[i]
-        
         y0_2 = t45_2[i]
         c2 = dif_2[i]
 
         # Initialize stacking base points
-        pos_base = 0
-        neg_base = 0
+        pos_base = neg_base = 0
+        pos_base_2 = neg_base_2 = 0
 
-        pos_base_2 = 0
-        neg_base_2 = 0
-
+        # First bar group (t45_1)
         if y0 >= 0:
             y_t45.append(y0)
             base_t45.append(pos_base)
@@ -345,15 +342,6 @@ def create_GO_One_figure(data_item, categories, width_line):
             y_t45.append(y0)
             base_t45.append(neg_base)
             neg_base += y0
-            
-        if y0_2 >= 0:
-            y_t45_2.append(y0_2)
-            base_t45_2.append(pos_base_2)
-            pos_base_2 += y0_2
-        else:
-            y_t45_2.append(y0_2)
-            base_t45_2.append(neg_base_2)
-            neg_base_2 += y0_2
 
         if c1 >= 0:
             y_c1.append(c1)
@@ -363,7 +351,17 @@ def create_GO_One_figure(data_item, categories, width_line):
             y_c1.append(c1)
             base_c1.append(neg_base)
             neg_base += c1
-            
+
+        # Second bar group (t45_2)
+        if y0_2 >= 0:
+            y_t45_2.append(y0_2)
+            base_t45_2.append(pos_base_2)
+            pos_base_2 += y0_2
+        else:
+            y_t45_2.append(y0_2)
+            base_t45_2.append(neg_base_2)
+            neg_base_2 += y0_2
+
         if c2 >= 0:
             y_c2.append(c2)
             base_c2.append(pos_base_2)
@@ -373,18 +371,53 @@ def create_GO_One_figure(data_item, categories, width_line):
             base_c2.append(neg_base_2)
             neg_base_2 += c2
 
-
+    # First stacked bar group (left)
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45,
         base=base_t45,
-        name='T+45 (%)',
+        name='T+45 (1)',
         marker_color='blue',
-        hovertemplate='T+45: %{y:.3f} %<extra></extra>',
-        legendrank=1  # First in legend
+        hovertemplate='T+45 (1): %{y:.3f}%<extra></extra>',
+        legendrank=1,
+        offsetgroup=0
     ))
 
-    # Add T+65 scatter next (will appear second in legend but on top visually)
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c1,
+        base=[b + y for b, y in zip(base_t45, y_t45)],
+        name='Diff to T+65 (1)',
+        marker_color='lightblue',
+        hovertemplate='Diff to T+65 (1): %{y:.3f}%<extra></extra>',
+        legendrank=2,
+        offsetgroup=0
+    ))
+
+    # Second stacked bar group (right)
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_t45_2,
+        base=base_t45_2,
+        name='T+45 (2)',
+        marker_color='green',
+        hovertemplate='T+45 (2): %{y:.3f}%<extra></extra>',
+        legendrank=3,
+        offsetgroup=1
+    ))
+
+    fig.add_trace(go.Bar(
+        x=categories,
+        y=y_c2,
+        base=[b + y for b, y in zip(base_t45_2, y_t45_2)],
+        name='Diff to T+65 (2)',
+        marker_color='lightgreen',
+        hovertemplate='Diff to T+65 (2): %{y:.3f}%<extra></extra>',
+        legendrank=4,
+        offsetgroup=1
+    ))
+
+    # T+65 markers (shared between both groups)
     fig.add_trace(go.Scatter(
         x=categories,
         y=t65,
@@ -396,27 +429,15 @@ def create_GO_One_figure(data_item, categories, width_line):
             line=dict(width=4)
         ),
         name='T+65',
-        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
-        legendrank=2  # Second in legend
+        hovertemplate='T+65: %{y:.3f}%<extra></extra>',
+        legendrank=5
     ))
-
-    # Add remaining bars (will appear after in legend)
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_c1,
-        base=base_c1,
-        name='Contribution Early MS (pps)',
-        marker_color='orange',
-        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
-        legendrank=3  # Third in legend
-    ))
-
 
     fig.update_layout(
-        barmode='relative',
+        barmode='group',  # Changed to group for side-by-side bars
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
-        bargap=0.15,
+        bargap=0.25,
         bargroupgap=0.1,
         title=dict(text=data_item.get("name", ""), font=dict(size=30), x=0.5, xanchor='center'),
         yaxis_title="Percentage (%)",
@@ -431,9 +452,10 @@ def create_GO_One_figure(data_item, categories, width_line):
             xanchor='right',
             x=1.0,
             font=dict(size=12),
-            traceorder='normal'  # This respects the legendrank ordering
+            traceorder='normal'
         )
     )
+
     fig.add_hline(
         y=0,
         line_dash="solid",
@@ -441,6 +463,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         line_color="black",
         opacity=0.8
     )
+    
     return fig
 
 
