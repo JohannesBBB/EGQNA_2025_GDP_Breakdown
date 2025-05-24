@@ -494,7 +494,7 @@ for tab_name, tab in zip(tab_names, tabs):
                 st.plotly_chart(fig, use_container_width=True, key=f"meanrev_{key}_{i}")
         else:
             st.warning("No mean revision data available for this tab.")
-
+jj
         if option == "QoQ Growth Rate":
             if key in data:
                 for i, data_item in enumerate(data[key]):
