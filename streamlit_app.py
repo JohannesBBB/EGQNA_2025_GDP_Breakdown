@@ -132,7 +132,7 @@ def create_revision_figure(data_item, categories):
             mode='markers+text',
             marker=dict(
                 color='orange',
-                symbol='circläe-open',
+                symbol='circle-open',
                 size=12,
                 line=dict(width=3)
             ),
