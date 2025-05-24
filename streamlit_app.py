@@ -56,8 +56,8 @@ for tab in tab_names:
             "t45_1": t45,
             "t45_2": t45_2,
             "t65": t65,
-            "dif_1": (t45-t65),
-            "dif_2": (t45_2-t45)
+            "dif_1": (t65-t45),
+            "dif_2": (t65-t45_2)
         })
         
     data[("QoQ Growth Rate", tab)] = data_list
