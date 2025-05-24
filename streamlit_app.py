@@ -320,16 +320,22 @@ def create_GO_One_figure(data_item, categories, width_line):
     dif_2 = data_item["dif_2"] * 100
 
     # Create lists to hold bars per category
-    y_t45, y_c1 = [], []
-    base_t45, base_c1 = [], []
+    y_t45, y_t45_2, y_c1, y_c2 = [], [], [], []
+    base_t45, base_t45_2, base_c1, base_c2 = [], [], [], []
 
     for i in range(len(categories)):
         y0 = t45_1[i]
         c1 = dif_1[i]
+        
+        y0_2 = t45_2[i]
+        c2 = dif_2[i]
 
         # Initialize stacking base points
         pos_base = 0
         neg_base = 0
+
+        pos_base_2 = 0
+        neg_base_2 = 0
 
         if y0 >= 0:
             y_t45.append(y0)
@@ -339,6 +345,15 @@ def create_GO_One_figure(data_item, categories, width_line):
             y_t45.append(y0)
             base_t45.append(neg_base)
             neg_base += y0
+            
+        if y0_2 >= 0:
+            y_t45_2.append(y0_2)
+            base_t45_2.append(pos_base_2)
+            pos_base_2 += y0_2
+        else:
+            y_t45_2.append(y0_2)
+            base_t45_2.append(neg_base_2)
+            neg_base_2 += y0_2
 
         if c1 >= 0:
             y_c1.append(c1)
@@ -348,44 +363,105 @@ def create_GO_One_figure(data_item, categories, width_line):
             y_c1.append(c1)
             base_c1.append(neg_base)
             neg_base += c1
+            
+        if c2 >= 0:
+            y_c2.append(c2)
+            base_c2.append(pos_base_2)
+            pos_base_2 += c2
+        else:
+            y_c2.append(c2)
+            base_c2.append(neg_base_2)
+            neg_base_2 += c2
 
 
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_t45,
-        base=base_t45,
-        name='T+45 (%)',
-        marker_color='blue',
-        hovertemplate='T+45: %{y:.3f} %<extra></extra>',
-        legendrank=1  # First in legend
-    ))
+fig = go.Figure()
 
-    # Add T+65 scatter next (will appear second in legend but on top visually)
-    fig.add_trace(go.Scatter(
-        x=categories,
-        y=t65,
-        mode='markers',
-        marker=dict(
-            color='black',
-            symbol='line-ew-open',
-            size=width_line,
-            line=dict(width=4)
-        ),
-        name='T+65',
-        hovertemplate='T+65: %{y:.3f} %<extra></extra>',
-        legendrank=2  # Second in legend
-    ))
+# --- First stacked bar group (left side) ---
+fig.add_trace(go.Bar(
+    x=categories,
+    y=y_t45,
+    base=base_t45,
+    name='T+45 (%)',
+    marker_color='blue',
+    hovertemplate='T+45: %{y:.3f} %<extra></extra>',
+    offsetgroup='1',
+    legendgroup='T+45',
+    showlegend=True
+))
 
-    # Add remaining bars (will appear after in legend)
-    fig.add_trace(go.Bar(
-        x=categories,
-        y=y_c1,
-        base=base_c1,
-        name='Contribution Early MS (pps)',
-        marker_color='orange',
-        hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
-        legendrank=3  # Third in legend
-    ))
+fig.add_trace(go.Bar(
+    x=categories,
+    y=y_c1,
+    base=base_c1,
+    name='Contribution Early MS (pps)',
+    marker_color='orange',
+    hovertemplate='Contribution Early MS: %{y:.3f} pps<extra></extra>',
+    offsetgroup='1',
+    legendgroup='Contribution Early MS',
+    showlegend=True
+))
+
+# --- Second stacked bar group (right side) ---
+fig.add_trace(go.Bar(
+    x=categories,
+    y=y_t45_2,
+    base=base_t45_2,
+    name='T+45 (%)',
+    marker_color='green',
+    hovertemplate='T+45 (2): %{y:.3f} %<extra></extra>',
+    offsetgroup='2',
+    legendgroup='T+45',
+    showlegend=False
+))
+
+fig.add_trace(go.Bar(
+    x=categories,
+    y=y_c2,
+    base=base_c2,
+    name='Contribution Early MS (pps)',
+    marker_color='red',
+    hovertemplate='Contribution Early MS (2): %{y:.3f} pps<extra></extra>',
+    offsetgroup='2',
+    legendgroup='Contribution Early MS',
+    showlegend=False
+))
+
+# --- Add black horizontal T+65 line (applies to both groups) ---
+fig.add_trace(go.Scatter(
+    x=categories,
+    y=t65,
+    mode='markers',
+    marker=dict(
+        color='black',
+        symbol='line-ew-open',  # Horizontal line symbol
+        size=width_line,        # You can adjust this
+    ),
+    name='T+65',
+    hovertemplate='T+65: %{y:.3f} %<extra></extra>',
+    legendrank=2,
+    legendgroup='T+65',
+    showlegend=True
+))
+
+# --- Final layout ---
+fig.update_layout(
+    barmode='relative',
+    bargap=0.2,
+    bargroupgap=0.05,
+    height=500,
+    title=dict(text='Your Chart Title', font=dict(size=24), x=0.5),
+    yaxis_title="Percentage (%)",
+    hovermode='x',
+    legend=dict(
+        orientation='v',
+        yanchor='top',
+        y=1,
+        xanchor='left',
+        x=1.02,
+        font=dict(size=12),
+        traceorder='normal'
+    )
+)
 
 
     fig.update_layout(
