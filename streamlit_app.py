@@ -371,18 +371,18 @@ def create_GO_One_figure(data_item, categories, width_line):
             base_c2.append(neg_base_2)
             neg_base_2 += c2
 
-    # First stacked bar group (left)
     fig.add_trace(go.Bar(
         x=categories,
         y=y_t45,
         base=base_t45,
         name='T+45 (1)',
         marker_color='blue',
-        hovertemplate='T+45 (1): %{y:.3f}%<extra></extra>',
+        hovertext=[f'T+45 (1): {val:.3f}%' for val in y_t45],
+        hoverinfo='text',
         legendrank=1,
         offsetgroup=0
     ))
-
+    
     # Second stacked bar group (right)
     fig.add_trace(go.Bar(
         x=categories,
@@ -390,37 +390,38 @@ def create_GO_One_figure(data_item, categories, width_line):
         base=base_t45_2,
         name='T+45 (2)',
         marker_color='green',
-        hovertemplate='T+45 (2): %{y:.3f}%<extra></extra>',
+        hovertext=[f'T+45 (2): {val:.3f}%' for val in y_t45_2],
+        hoverinfo='text',
         legendrank=2,
         offsetgroup=1
     ))
-
+    
     fig.add_trace(go.Bar(
         x=categories,
         y=y_c1,
         base=base_c1,
         name='Difference to T+65 (1)',
         marker_color='orange',
-        hovertemplate='Difference to T+65 (1): %{y:.3f}%<extra></extra>',
+        hovertext=[f'Difference to T+65 (1): {val:.3f}%' for val in y_c1],
+        hoverinfo='text',
         legendrank=3,
         offsetgroup=2
     ))
-
+    
     fig.add_trace(go.Bar(
         x=categories,
         y=y_c2,
         base=base_c2,
         name='Difference to T+65 (2)',
         marker_color='red',
-        hovertemplate='Difference to T+65 (2): %{y:.3f}%<extra></extra>',
+        hovertext=[f'Difference to T+65 (2): {val:.3f}%' for val in y_c2],
+        hoverinfo='text',
         legendrank=4,
         offsetgroup=3
     ))
-
-
-
+    
     fig.update_layout(
-        barmode='group',  # Changed to group for side-by-side bars
+        barmode='group',  # Side-by-side bars
         height=500,
         margin=dict(l=200, r=200, t=80, b=80),
         bargap=0.25,
@@ -441,6 +442,7 @@ def create_GO_One_figure(data_item, categories, width_line):
             traceorder='normal'
         )
     )
+
 
     fig.add_hline(
         y=0,
