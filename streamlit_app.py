@@ -384,7 +384,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     ))
 
     # Second stacked bar group (right)
-    fig.add_trace(go.Bar(
+    fig.add_trace(go.Bar(6
         x=categories,
         y=y_t45_2,
         base=base_t45_2,
@@ -411,7 +411,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         y=y_c2,
         base=base_c2,
         name='Difference to T+65 (2)',
-        marker_color='orange',
+        marker_color='red',
         hovertemplate='Difference to T+65 (2): %{y:.3f}%<extra></extra>',
         legendrank=4,
         offsetgroup=1
