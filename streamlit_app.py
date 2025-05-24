@@ -398,7 +398,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     fig.add_trace(go.Bar(
         x=categories,
         y=y_c1,
-        base=[b + y for b, y in zip(base_t45, y_t45)],
+        base=base_c1,
         name='Difference to T+65 (1)',
         marker_color='orange',
         hovertemplate='Difference to T+65 (1): %{y:.3f}%<extra></extra>',
@@ -409,7 +409,7 @@ def create_GO_One_figure(data_item, categories, width_line):
     fig.add_trace(go.Bar(
         x=categories,
         y=y_c2,
-        base=[b + y for b, y in zip(base_t45_2, y_t45_2)],
+        base=base_c2,
         name='Difference to T+65 (2)',
         marker_color='orange',
         hovertemplate='Difference to T+65 (2): %{y:.3f}%<extra></extra>',
