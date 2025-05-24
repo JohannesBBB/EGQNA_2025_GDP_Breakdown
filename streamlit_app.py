@@ -417,21 +417,7 @@ def create_GO_One_figure(data_item, categories, width_line):
         offsetgroup=1
     ))
 
-    # T+65 markers (shared between both groups)
-    fig.add_trace(go.Scatter(
-        x=categories,
-        y=t65,
-        mode='markers',
-        marker=dict(
-            color='black',
-            symbol='line-ew-open',
-            size=width_line,
-            line=dict(width=4)
-        ),
-        name='T+65',
-        hovertemplate='T+65: %{y:.3f}%<extra></extra>',
-        legendrank=5
-    ))
+
 
     fig.update_layout(
         barmode='group',  # Changed to group for side-by-side bars
